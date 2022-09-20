@@ -12,10 +12,12 @@
 # דודי מלכה <Dudimalka6@gmail.com>, 2019
 # Martin Trigaux, 2019
 # Amit Spilman <amit@laylinetech.com>, 2019
-# hed shefetr <hed@laylinetech.com>, 2019
+# hed shefer <hed@laylinetech.com>, 2019
 # Yihya Hugirat <hugirat@gmail.com>, 2020
 # ZVI BLONDER <ZVIBLONDER@gmail.com>, 2020
-# Lilach Gilliam <lilach.gilliam@gmail.com>, 2021
+# Lilach Gilliam <lilach.gilliam@gmail.com>, 2022
+# Netta Waizer, 2022
+# MichaelHadar, 2022
 # 
 msgid ""
 msgstr ""
@@ -23,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-27 10:17+0000\n"
 "PO-Revision-Date: 2019-08-26 09:15+0000\n"
-"Last-Translator: Lilach Gilliam <lilach.gilliam@gmail.com>, 2021\n"
+"Last-Translator: MichaelHadar, 2022\n"
 "Language-Team: Hebrew (https://www.transifex.com/odoo/teams/41243/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -188,7 +190,7 @@ msgstr "'%s' אינו ניתן להמרה לתאריך, תאריך ושעה או
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "(change)"
-msgstr ""
+msgstr "(שינוי)"
 
 #. module: web
 #. openerp-web
@@ -339,7 +341,7 @@ msgstr "הפעל איתור באגים על נכסים"
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Activate Tests Assets Debugging"
-msgstr ""
+msgstr "הפעל איתור באגים על נכסים"
 
 #. module: web
 #. openerp-web
@@ -1094,7 +1096,7 @@ msgstr ""
 msgid ""
 "Could not set the cover image: incorrect field (\"%s\") is provided in the "
 "view."
-msgstr ""
+msgstr "לא ניתן להגדיר את תמונת השער: שדה שגוי (\"%s\") בתצוגה."
 
 #. module: web
 #. openerp-web
@@ -1636,7 +1638,7 @@ msgstr "שדה:"
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Fields View Get"
-msgstr ""
+msgstr "צפה בתצוגה זו"
 
 #. module: web
 #. openerp-web
@@ -3090,7 +3092,7 @@ msgstr "אדום"
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Regenerate Assets Bundles"
-msgstr ""
+msgstr "צור מחדש מקבצי נכסים"
 
 #. module: web
 #. openerp-web
@@ -3175,21 +3177,21 @@ msgstr "הבקשה אינה בתוקף"
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Run Click Everywhere Test"
-msgstr ""
+msgstr "הרץ בדיקת \"לחץ בכל מקום\""
 
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Run JS Mobile Tests"
-msgstr ""
+msgstr "הרץ בדיקות JS (מכשיר נייד)"
 
 #. module: web
 #. openerp-web
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "Run JS Tests"
-msgstr ""
+msgstr "הרץ בדיקות JS"
 
 #. module: web
 #. openerp-web
@@ -3512,7 +3514,7 @@ msgstr "מיוחד:"
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "Stacked"
-msgstr ""
+msgstr "מונח בערימה חסרת סדר"
 
 #. module: web
 #. openerp-web
@@ -3943,7 +3945,7 @@ msgstr "לא ניתן למצוא Wkhtmltopdf במערכת זו. הדוח יוצ�
 #: code:addons/web/static/src/js/views/list/list_controller.js:0
 #, python-format
 msgid "Unarchive"
-msgstr ""
+msgstr "הוצא מהארכיון"
 
 #. module: web
 #. openerp-web
@@ -4138,7 +4140,7 @@ msgstr "צפה בשדות"
 #: code:addons/web/static/src/xml/debug.xml:0
 #, python-format
 msgid "View Metadata"
-msgstr ""
+msgstr "צפה במטא-דאטא"
 
 #. module: web
 #: model:ir.model.fields,field_description:web.field_ir_actions_act_window_view__view_mode
@@ -4150,7 +4152,7 @@ msgstr "סוג תצוגה"
 #: code:addons/web/static/src/xml/base.xml:0
 #, python-format
 msgid "View switcher"
-msgstr ""
+msgstr "מחליף תצוגה"
 
 #. module: web
 #. openerp-web

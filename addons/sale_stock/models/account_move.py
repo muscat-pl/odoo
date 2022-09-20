@@ -42,7 +42,7 @@ class AccountMove(models.Model):
         previous_qties_delivered = defaultdict(float)
         stock_move_lines = current_invoice_amls.sale_line_ids.move_ids.move_line_ids.filtered(lambda sml: sml.state == 'done' and sml.lot_id).sorted(lambda sml: (sml.date, sml.id))
         for sml in stock_move_lines:
-            if sml.product_id not in invoiced_products:
+            if sml.product_id not in invoiced_products or 'customer' not in {sml.location_id.usage, sml.location_dest_id.usage}:
                 continue
             product = sml.product_id
             product_uom = product.uom_id
@@ -68,18 +68,19 @@ class AccountMove(models.Model):
 
         lot_values = []
         for lot, qty in qties_per_lot.items():
-            if float_is_zero(invoiced_qties[lot.product_id], precision_rounding=lot.product_uom_id.rounding) \
-                    or float_compare(qty, 0, precision_rounding=lot.product_uom_id.rounding) <= 0:
+            lot_sudo = lot.sudo()
+            if float_is_zero(invoiced_qties[lot_sudo.product_id], precision_rounding=lot_sudo.product_uom_id.rounding) \
+                    or float_compare(qty, 0, precision_rounding=lot_sudo.product_uom_id.rounding) <= 0:
                 continue
-            invoiced_lot_qty = min(qty, invoiced_qties[lot.product_id])
-            invoiced_qties[lot.product_id] -= invoiced_lot_qty
+            invoiced_lot_qty = min(qty, invoiced_qties[lot_sudo.product_id])
+            invoiced_qties[lot_sudo.product_id] -= invoiced_lot_qty
             lot_values.append({
-                'product_name': lot.product_id.display_name,
+                'product_name': lot_sudo.product_id.display_name,
                 'quantity': formatLang(self.env, invoiced_lot_qty, dp='Product Unit of Measure'),
-                'uom_name': lot.product_uom_id.name,
-                'lot_name': lot.name,
+                'uom_name': lot_sudo.product_uom_id.name,
+                'lot_name': lot_sudo.name,
                 # The lot id is needed by localizations to inherit the method and add custom fields on the invoice's report.
-                'lot_id': lot.id,
+                'lot_id': lot_sudo.id,
             })
 
         return lot_values
