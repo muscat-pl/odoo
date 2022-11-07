@@ -15,6 +15,7 @@
 # Shigekazu N. <shigekazu.noka@gmail.com>, 2020
 # Noma Yuki, 2021
 # Yoshi Tashiro (Quartile) <tashiro@roomsfor.hk>, 2021
+# 江口和志 <sandwhale1010@gmail.com>, 2022
 # Ryoko Tsuda <ryoko@quartile.co>, 2022
 # 
 msgid ""
@@ -1074,7 +1075,7 @@ msgstr "ゲーミフィケーションの挑戦"
 #. module: gamification
 #: model:ir.model,name:gamification.model_gamification_goal
 msgid "Gamification Goal"
-msgstr ""
+msgstr "ゲーミフィケーション目標"
 
 #. module: gamification
 #: model:ir.model,name:gamification.model_gamification_goal_definition
@@ -1537,7 +1538,7 @@ msgstr "月合計"
 #. module: gamification
 #: model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__description_motivational
 msgid "Motivational"
-msgstr ""
+msgstr "モチベーション向上"
 
 #. module: gamification
 #: model:ir.model.fields,help:gamification.field_gamification_karma_rank__description_motivational
@@ -2435,7 +2436,7 @@ msgstr "あなたはユーザー許可リストにいません。"
 #: code:addons/gamification/wizard/grant_badge.py:0
 #, python-format
 msgid "You can not grant a badge to yourself."
-msgstr ""
+msgstr "自分自身にバッジを付与することはできません。"
 
 #. module: gamification
 #: code:addons/gamification/models/challenge.py:0
