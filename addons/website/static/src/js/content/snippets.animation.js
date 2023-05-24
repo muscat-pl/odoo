@@ -12,7 +12,6 @@ var core = require('web.core');
 const dom = require('web.dom');
 var mixins = require('web.mixins');
 var publicWidget = require('web.public.widget');
-var utils = require('web.utils');
 const wUtils = require('website.utils');
 
 var qweb = core.qweb;
@@ -986,9 +985,6 @@ registry.anchorSlide = publicWidget.Widget.extend({
      * @private
      */
     _onAnimateClick: function (ev) {
-        if (this.$target[0].pathname !== window.location.pathname) {
-            return;
-        }
         var hash = this.$target[0].hash;
         if (hash === '#top' || hash === '#bottom') {
             // If the anchor targets #top or #bottom, directly call the
@@ -1003,9 +999,11 @@ registry.anchorSlide = publicWidget.Widget.extend({
             });
             return;
         }
-        if (!utils.isValidAnchor(hash)) {
+        if (!hash.length) {
             return;
         }
+        // Escape special characters to make the jQuery selector to work.
+        hash = '#' + $.escapeSelector(hash.substring(1));
         var $anchor = $(hash);
         const scrollValue = $anchor.attr('data-anchor');
         if (!$anchor.length || !scrollValue) {
@@ -1194,6 +1192,20 @@ registry.BottomFixedElement = publicWidget.Widget.extend({
             return;
         }
 
+        // The bottom fixed elements are always hidden when a modal is open
+        // thanks to the CSS that is based on the 'modal-open' class added to
+        // the body. However, when the modal does not have a backdrop (e.g.
+        // cookies bar), this 'modal-open' class is not added. That's why we
+        // handle it here. Note that the popup widget code triggers a 'scroll'
+        // event when the modal is hidden to make the bottom fixed elements
+        // reappear.
+        if (this.el.querySelector('.s_popup_no_backdrop.show')) {
+            for (const el of $bottomFixedElements) {
+                el.classList.add('o_bottom_fixed_element_hidden');
+            }
+            return;
+        }
+
         $bottomFixedElements.removeClass('o_bottom_fixed_element_hidden');
         if ((this.$scrollingElement[0].offsetHeight + this.$scrollingElement[0].scrollTop) >= (this.$scrollingElement[0].scrollHeight - 2)) {
             const buttonEls = [...this.$('.btn:visible')];
@@ -1219,16 +1231,25 @@ registry.WebsiteAnimate = publicWidget.Widget.extend({
     start() {
         this.lastScroll = 0;
         this.$scrollingElement = $().getScrollingElement(this.ownerDocument);
-        // By default, elements are hidden by the css of o_animate.
-        // Render elements and trigger the animation then pause it in state 0.
-        this.$animatedElements = this.$target.find('.o_animate');
+        this.$animatedElements = this.$('.o_animate');
+
         // Fix for "transform: none" not overriding keyframe transforms on
-        // iPhone 8 and lower.
+        // some iPhone using Safari. Note that all animated elements are checked
+        // (not only one) as the bug is not systematic and may depend on some
+        // other conditions (for example: an animated image in a block which is
+        // hidden on mobile would not have the issue).
+        const couldOverflowBecauseOfSafariBug = [...this.$animatedElements].some(el => {
+            return window.getComputedStyle(el).transform !== 'none';
+        });
         this.forceOverflowXHidden = false;
-        if (this.$animatedElements[0] && window.getComputedStyle(this.$animatedElements[0]).transform !== 'none') {
+        if (couldOverflowBecauseOfSafariBug) {
             this._toggleOverflowXHidden(true);
+            // Now prevent any call to _toggleOverflowXHidden to have an effect
             this.forceOverflowXHidden = true;
         }
+
+        // By default, elements are hidden by the css of o_animate.
+        // Render elements and trigger the animation then pause it in state 0.
         _.each(this.$animatedElements, el => {
             if (el.closest('.dropdown')) {
                 el.classList.add('o_animate_in_dropdown');

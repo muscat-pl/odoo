@@ -15,7 +15,7 @@ from odoo.osv.expression import OR, TRUE_LEAF, FALSE_LEAF
 
 from .project_task_recurrence import DAYS, WEEKS
 from .project_update import STATUS_COLOR
-
+from odoo.tools.misc import get_lang
 
 PROJECT_TASK_READABLE_FIELDS = {
     'id',
@@ -48,7 +48,6 @@ PROJECT_TASK_READABLE_FIELDS = {
 PROJECT_TASK_WRITABLE_FIELDS = {
     'name',
     'partner_id',
-    'partner_email',
     'date_deadline',
     'tag_ids',
     'sequence',
@@ -890,7 +889,7 @@ class Project(models.Model):
         if self.privacy_visibility != 'portal':
             return False
         if self.env.user.has_group('base.group_portal'):
-            return self.env.user.partner_id in self.collaborator_ids.partner_id
+            return self.env['project.collaborator'].search([('project_id', '=', self.sudo().id), ('partner_id', '=', self.env.user.partner_id.id)])
         return self.env.user.has_group('base.group_user')
 
     def _add_collaborators(self, partners):
@@ -1293,7 +1292,7 @@ class Task(models.Model):
                 task.repeat_week,
                 task.repeat_month,
                 count=number_occurrences)
-            date_format = self.env['res.lang']._lang_get(self.env.user.lang).date_format
+            date_format = self.env['res.lang']._lang_get(self.env.user.lang).date_format or get_lang(self.env).date_format
             if recurrence_left == 0:
                 recurrence_title = _('There are no more occurrences.')
             else:
@@ -2024,10 +2023,6 @@ class Task(models.Model):
 
         project_user_group_id = self.env.ref('project.group_project_user').id
         new_group = ('group_project_user', lambda pdata: pdata['type'] == 'user' and project_user_group_id in pdata['groups'], {})
-        if not self.user_ids and not self.stage_id.fold:
-            take_action = self._notify_get_action_link('assign', **local_msg_vals)
-            project_actions = [{'url': take_action, 'title': _('I take it')}]
-            new_group[2]['actions'] = project_actions
         groups = [new_group] + groups
 
         if self.project_privacy_visibility == 'portal':

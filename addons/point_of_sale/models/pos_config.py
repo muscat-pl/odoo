@@ -188,13 +188,6 @@ class PosConfig(models.Model):
         for config in self:
             config.cash_control = bool(config.payment_method_ids.filtered('is_cash_count'))
 
-    @api.onchange('payment_method_ids')
-    def _check_cash_payment_method(self):
-        for config in self:
-            if len(config.payment_method_ids.filtered('is_cash_count')) > 1:
-                config.payment_method_ids = config.payment_method_ids._origin
-                raise ValidationError(_('You can only have one cash payment method.'))
-
     @api.depends('use_pricelist', 'available_pricelist_ids')
     def _compute_allowed_pricelist_ids(self):
         for config in self:
@@ -206,10 +199,7 @@ class PosConfig(models.Model):
     @api.depends('company_id')
     def _compute_company_has_template(self):
         for config in self:
-            if config.company_id.chart_template_id:
-                config.company_has_template = True
-            else:
-                config.company_has_template = False
+            config.company_has_template = self.env['account.chart.template'].existing_accounting(config.company_id) or config.company_id.chart_template_id
 
     def _compute_is_installed_account_accountant(self):
         account_accountant = self.env['ir.module.module'].sudo().search([('name', '=', 'account_accountant'), ('state', '=', 'installed')])

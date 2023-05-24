@@ -120,7 +120,7 @@ class StockMove(models.Model):
              "this second option should be chosen.")
     scrapped = fields.Boolean('Scrapped', related='location_dest_id.scrap_location', readonly=True, store=True)
     scrap_ids = fields.One2many('stock.scrap', 'move_id')
-    group_id = fields.Many2one('procurement.group', 'Procurement Group', default=_default_group_id)
+    group_id = fields.Many2one('procurement.group', 'Procurement Group', default=_default_group_id, index=True)
     rule_id = fields.Many2one(
         'stock.rule', 'Stock Rule', ondelete='restrict', help='The stock rule that created this stock move',
         check_company=True)
@@ -600,6 +600,9 @@ class StockMove(models.Model):
                 receipt_moves_to_reassign |= move_to_unreserve.filtered(lambda m: m.location_id.usage == 'supplier')
                 receipt_moves_to_reassign |= (self - move_to_unreserve).filtered(lambda m: m.location_id.usage == 'supplier' and m.state in ('partially_available', 'assigned'))
                 move_to_recompute_state |= self - move_to_unreserve - receipt_moves_to_reassign
+        # propagate product_packaging_id changes in the stock move chain
+        if 'product_packaging_id' in vals:
+            self._propagate_product_packaging(vals['product_packaging_id'])
         if 'date_deadline' in vals:
             self._set_date_deadline(vals.get('date_deadline'))
         res = super(StockMove, self).write(vals)
@@ -608,6 +611,29 @@ class StockMove(models.Model):
         if receipt_moves_to_reassign:
             receipt_moves_to_reassign._action_assign()
         return res
+
+    def _propagate_product_packaging(self, product_package_id):
+        """
+        Propagate the product_packaging_id of a move to its destination and origin.
+        If there is a bifurcation in the chain we do not propagate the package.
+        """
+        already_propagated_ids = self.env.context.get('product_packaging_propagation_ids', set()) | set(self.ids)
+        self = self.with_context(product_packaging_propagation_ids=already_propagated_ids)
+        for move in self:
+            # propagate on destination move
+            for move_dest in move.move_dest_ids:
+                if move_dest.id not in already_propagated_ids and \
+                        move_dest.state not in ['cancel', 'done'] and \
+                        move_dest.product_packaging_id.id != product_package_id and \
+                        move_dest.move_orig_ids == move:  # checks that you are the only parent move of your destination
+                    move_dest.product_packaging_id = product_package_id
+            # propagate on origin move
+            for move_orig in move.move_orig_ids:
+                if move_orig.id not in already_propagated_ids and \
+                        move_orig.state not in ['cancel', 'done'] and \
+                        move_orig.product_packaging_id.id != product_package_id and \
+                        move_orig.move_dest_ids == move:  # checks that you are the only child move of your origin
+                    move_orig.product_packaging_id = product_package_id
 
     def _delay_alert_get_documents(self):
         """Returns a list of recordset of the documents linked to the stock.move in `self` in order
@@ -1741,7 +1767,7 @@ class StockMove(models.Model):
     def _prepare_move_split_vals(self, qty):
         vals = {
             'product_uom_qty': qty,
-            'procure_method': 'make_to_stock',
+            'procure_method': self.procure_method,
             'move_dest_ids': [(4, x.id) for x in self.move_dest_ids if x.state not in ('done', 'cancel')],
             'move_orig_ids': [(4, x.id) for x in self.move_orig_ids],
             'origin_returned_move_id': self.origin_returned_move_id.id,
@@ -1903,9 +1929,11 @@ class StockMove(models.Model):
             if move.state not in ('partially_available', 'assigned'):
                 continue
             for move_line in move.move_line_ids:
-                if move.has_tracking != 'none' and not (move_line.lot_id or move_line.lot_name):
-                    continue
-                move_line.qty_done = move_line.product_uom_qty
+                if move.has_tracking == 'none' or\
+                    (move.picking_type_id.use_existing_lots and move_line.lot_id) or\
+                    (move.picking_type_id.use_create_lots and move_line.lot_name) or\
+                    (not move.picking_type_id.use_existing_lots and not move.picking_type_id.use_create_lots):
+                    move_line.qty_done = move_line.product_uom_qty
 
     def _adjust_procure_method(self):
         """ This method will try to apply the procure method MTO on some moves if

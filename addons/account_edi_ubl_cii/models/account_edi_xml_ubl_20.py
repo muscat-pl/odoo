@@ -291,7 +291,7 @@ class AccountEdiXmlUBL20(models.AbstractModel):
         else:
             gross_price_subtotal = net_price_subtotal / (1.0 - (line.discount or 0.0) / 100.0)
         # Price subtotal with discount / quantity:
-        gross_price_unit = line.currency_id.round((gross_price_subtotal / line.quantity) if line.quantity else 0.0)
+        gross_price_unit = gross_price_subtotal / line.quantity if line.quantity else 0.0
 
         uom = super()._get_uom_unece_code(line)
 
@@ -301,6 +301,7 @@ class AccountEdiXmlUBL20(models.AbstractModel):
 
             # The price of an item, exclusive of VAT, after subtracting item price discount.
             'price_amount': gross_price_unit,
+            'product_price_dp': self.env['decimal.precision'].precision_get('Product Price'),
 
             # The number of item units to which the price applies.
             # setting to None -> the xml will not comprise the BaseQuantity (it's not mandatory)
@@ -347,6 +348,9 @@ class AccountEdiXmlUBL20(models.AbstractModel):
                 '_tax_category_vals_': tax_category_vals,
             }
 
+        # Validate the structure of the taxes
+        self._validate_taxes(invoice)
+
         # Compute the tax details for the whole invoice and each invoice line separately.
         taxes_vals = invoice._prepare_edi_tax_details(grouping_key_generator=grouping_key_generator)
 
@@ -371,6 +375,12 @@ class AccountEdiXmlUBL20(models.AbstractModel):
 
         supplier = invoice.company_id.partner_id.commercial_partner_id
         customer = invoice.commercial_partner_id
+
+        # OrderReference/SalesOrderID (sales_order_id) is optional
+        sales_order_id = 'sale_line_ids' in invoice.invoice_line_ids._fields \
+                         and ",".join(invoice.invoice_line_ids.sale_line_ids.order_id.mapped('name'))
+        # OrderReference/ID (order_reference) is mandatory inside the OrderReference node !
+        order_reference = invoice.ref or invoice.name if sales_order_id else invoice.ref
 
         vals = {
             'builder': self,
@@ -397,7 +407,8 @@ class AccountEdiXmlUBL20(models.AbstractModel):
                 'issue_date': invoice.invoice_date,
                 'due_date': invoice.invoice_date_due,
                 'note_vals': [html2plaintext(invoice.narration)] if invoice.narration else [],
-                'order_reference': invoice.invoice_origin,
+                'order_reference': order_reference,
+                'sales_order_id': sales_order_id,
                 'accounting_supplier_party_vals': {
                     'party_vals': self._get_partner_party_vals(supplier, role='supplier'),
                 },
@@ -458,6 +469,12 @@ class AccountEdiXmlUBL20(models.AbstractModel):
     # -------------------------------------------------------------------------
 
     def _import_fill_invoice_form(self, journal, tree, invoice_form, qty_factor):
+
+        def _find_value(xpath, element=tree):
+            # avoid 'TypeError: empty namespace prefix is not supported in XPath'
+            nsmap = {k: v for k, v in tree.nsmap.items() if k is not None}
+            return self.env['account.edi.format']._find_value(xpath, element, nsmap)
+
         logs = []
 
         if qty_factor == -1:
@@ -465,14 +482,13 @@ class AccountEdiXmlUBL20(models.AbstractModel):
 
         # ==== partner_id ====
 
-        partner = self._import_retrieve_info_from_map(
-            tree,
-            self._import_retrieve_partner_map(self.env.company, journal.type),
-        )
-        if partner:
-            invoice_form.partner_id = partner
-        else:
-            logs.append(_("Could not retrieve the %s.", _("customer") if invoice_form.move_type in ('out_invoice', 'out_refund') else _("vendor")))
+        role = "Customer" if invoice_form.journal_id.type == 'sale' else "Supplier"
+        vat = _find_value(f'//cac:Accounting{role}Party/cac:Party//cbc:CompanyID')
+        phone = _find_value(f'//cac:Accounting{role}Party/cac:Party//cbc:Telephone')
+        mail = _find_value(f'//cac:Accounting{role}Party/cac:Party//cbc:ElectronicMail')
+        name = _find_value(f'//cac:Accounting{role}Party/cac:Party//cbc:Name')
+        country_code = _find_value(f'//cac:Accounting{role}Party/cac:Party//cac:Country//cbc:IdentificationCode')
+        self._import_retrieve_and_fill_partner(invoice_form, name=name, phone=phone, mail=mail, vat=vat, country_code=country_code)
 
         # ==== currency_id ====
 
@@ -503,7 +519,7 @@ class AccountEdiXmlUBL20(models.AbstractModel):
             narration += note_node.text + "\n"
 
         payment_terms_node = tree.find('./{*}PaymentTerms/{*}Note')  # e.g. 'Payment within 10 days, 2% discount'
-        if payment_terms_node is not None:
+        if payment_terms_node is not None and payment_terms_node.text:
             narration += payment_terms_node.text + "\n"
 
         invoice_form.narration = narration
@@ -531,7 +547,7 @@ class AccountEdiXmlUBL20(models.AbstractModel):
         # ==== invoice_incoterm_id ====
 
         incoterm_code_node = tree.find('./{*}TransportExecutionTerms/{*}DeliveryTerms/{*}ID')
-        if incoterm_code_node is not None:
+        if incoterm_code_node is not None and incoterm_code_node.text:
             incoterm = self.env['account.incoterms'].search([('code', '=', incoterm_code_node.text)], limit=1)
             if incoterm:
                 invoice_form.invoice_incoterm_id = incoterm
@@ -540,10 +556,10 @@ class AccountEdiXmlUBL20(models.AbstractModel):
 
         logs += self._import_fill_invoice_allowance_charge(tree, invoice_form, journal, qty_factor)
 
-        # ==== Down Payment (prepaid amount) ====
+        # ==== Prepaid amount ====
 
         prepaid_node = tree.find('./{*}LegalMonetaryTotal/{*}PrepaidAmount')
-        self._import_fill_invoice_down_payment(invoice_form, prepaid_node, qty_factor)
+        logs += self._import_log_prepaid_amount(invoice_form, prepaid_node, qty_factor)
 
         # ==== invoice_line_ids: InvoiceLine/CreditNoteLine ====
 

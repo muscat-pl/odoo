@@ -214,7 +214,9 @@ const FontFamilyPickerUserValueWidget = SelectUserValueWidget.extend({
                         let isValidFamily = false;
 
                         try {
-                            const result = await fetch("https://fonts.googleapis.com/css?family=" + m[1]+':300,300i,400,400i,700,700i', {method: 'HEAD'});
+                            // Font family is an encoded query parameter:
+                            // "Open+Sans" needs to remain "Open+Sans".
+                            const result = await fetch("https://fonts.googleapis.com/css?family=" + m[1] + ':300,300i,400,400i,700,700i', {method: 'HEAD'});
                             // Google fonts server returns a 400 status code if family is not valid.
                             if (result.ok) {
                                 isValidFamily = true;
@@ -1594,7 +1596,7 @@ options.registry.company_data = options.Class.extend({
                     args: [session.uid, ['company_id']],
                 });
             }).then(function (res) {
-                proto.__link = '/web#action=base.action_res_company_form&view_type=form&id=' + (res && res[0] && res[0].company_id[0] || 1);
+                proto.__link = '/web#action=base.action_res_company_form&view_type=form&id=' + encodeURIComponent(res && res[0] && res[0].company_id[0] || 1);
             });
         }
         return Promise.all([this._super.apply(this, arguments), prom]);
@@ -2170,6 +2172,33 @@ options.registry.HeaderNavbar = options.Class.extend({
     },
 
     //--------------------------------------------------------------------------
+    // Public
+    //--------------------------------------------------------------------------
+
+    /**
+     * @override
+     */
+    async start() {
+        await this._super(...arguments);
+        // TODO Remove in master.
+        const signInOptionEl = this.el.querySelector('[data-customize-website-views="portal.user_sign_in"]');
+        signInOptionEl.dataset.noPreview = 'true';
+    },
+    /**
+     * @private
+     */
+    async updateUI() {
+        await this._super(...arguments);
+        // For all header templates except those in the following array, change
+        // the label of the option to "Mobile Alignment" (instead of
+        // "Alignment") because it only impacts the mobile view.
+        if (!["'default'", "'hamburger'", "'sidebar'"].includes(weUtils.getCSSVariableValue('header-template'))) {
+            const alignmentOptionTitleEl = this.el.querySelector('[data-name="header_alignment_opt"] we-title');
+            alignmentOptionTitleEl.textContent = _t("Mobile Alignment");
+        }
+    },
+
+    //--------------------------------------------------------------------------
     // Private
     //--------------------------------------------------------------------------
 
@@ -2188,6 +2217,14 @@ options.registry.HeaderNavbar = options.Class.extend({
             case 'no_hamburger_opt': {
                 return !weUtils.getCSSVariableValue('header-template').includes('hamburger');
             }
+        }
+        if (widgetName === 'header_alignment_opt') {
+            if (!this.$target[0].querySelector('.o_offcanvas_menu_toggler')) {
+                // If mobile menu is "Default", hides the alignment option for
+                // "hamburger full" and "magazine" header templates.
+                return !["'hamburger-full'", "'magazine'"].includes(weUtils.getCSSVariableValue('header-template'));
+            }
+            return true;
         }
         return this._super(...arguments);
     },
@@ -2454,7 +2491,12 @@ options.registry.MobileVisibility = options.Class.extend({
      * @see this.selectClass for parameters
      */
     showOnMobile(previewMode, widgetValue, params) {
-        const classes = `d-none d-md-${this.$target.css('display')}`;
+        // For compatibility with former implementation: remove the previously
+        // added `d-md-*` class if any, as it should now be `d-lg-*`.
+        if (widgetValue) {
+            this.$target[0].classList.remove(`d-md-${this.$target.css('display')}`);
+        }
+        const classes = `d-none d-lg-${this.$target.css('display')}`;
         this.$target.toggleClass(classes, !widgetValue);
     },
 
@@ -2469,7 +2511,7 @@ options.registry.MobileVisibility = options.Class.extend({
         if (methodName === 'showOnMobile') {
             const classList = [...this.$target[0].classList];
             return classList.includes('d-none') &&
-                classList.some(className => className.startsWith('d-md-')) ? '' : 'true';
+                classList.some(className => className.match(/^(d-md-|d-lg-)/g)) ? '' : 'true';
         }
         return await this._super(...arguments);
     },
@@ -2502,8 +2544,7 @@ options.registry.anchor = options.Class.extend({
         this.$button = this.$el.find('we-button');
         const clipboard = new ClipboardJS(this.$button[0], {text: () => this._getAnchorLink()});
         clipboard.on('success', () => {
-            const anchor = decodeURIComponent(this._getAnchorLink());
-            const message = sprintf(Markup(_t("Anchor copied to clipboard<br>Link: %s")), anchor);
+            const message = sprintf(Markup(_t("Anchor copied to clipboard<br>Link: %s")), this._getAnchorLink());
             this.displayNotification({
               type: 'success',
               message: message,
@@ -3043,17 +3084,11 @@ options.registry.ConditionalVisibility = options.Class.extend({
     async onTargetShow() {
         this.$target[0].classList.remove('o_conditional_hidden');
     },
+    // Todo: remove me in master.
     /**
      * @override
      */
-    cleanForSave() {
-        // Kinda hacky: the snippet is forced hidden via onTargetHide on save
-        // but should be marked as visible as when entering edit mode later, the
-        // snippet will be shown naturally (as the CSS rules won't apply).
-        // Without this, the "eye" icon of the visibility panel would be shut
-        // when entering edit mode.
-        this.trigger_up('snippet_option_visibility_update', { show: true });
-    },
+    cleanForSave() {},
 
     //--------------------------------------------------------------------------
     // Options

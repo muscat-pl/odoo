@@ -231,9 +231,11 @@ class StockMoveLine(models.Model):
             else:
                 for sml in smls:
                     qty = max(sml.product_uom_qty, sml.qty_done)
-                    sml.location_dest_id = sml.move_id.location_dest_id.with_context(exclude_sml_ids=excluded_smls.ids)._get_putaway_strategy(
+                    putaway_loc_id = sml.move_id.location_dest_id.with_context(exclude_sml_ids=excluded_smls.ids)._get_putaway_strategy(
                         sml.product_id, quantity=qty, packaging=sml.move_id.product_packaging_id,
                     )
+                    if putaway_loc_id != sml.location_dest_id:
+                        sml.location_dest_id = putaway_loc_id
                     excluded_smls -= sml
 
     def _get_default_dest_location(self):
@@ -266,6 +268,8 @@ class StockMoveLine(models.Model):
                 vals['company_id'] = self.env['stock.move'].browse(vals['move_id']).company_id.id
             elif vals.get('picking_id'):
                 vals['company_id'] = self.env['stock.picking'].browse(vals['picking_id']).company_id.id
+            if self.env.context.get('import_file') and vals.get('product_uom_qty') != 0:
+                raise UserError(_("It is not allow to import reserved quantity, you have to use the quantity directly."))
 
         mls = super().create(vals_list)
 
@@ -676,6 +680,7 @@ class StockMoveLine(models.Model):
             product_id, location_id, lot_id=lot_id, package_id=package_id, owner_id=owner_id, strict=True
         )
         if quantity > available_quantity:
+            quantity = quantity - available_quantity
             # We now have to find the move lines that reserved our now unavailable quantity. We
             # take care to exclude ourselves and the move lines were work had already been done.
             outdated_move_lines_domain = [

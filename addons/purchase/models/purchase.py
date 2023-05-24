@@ -309,13 +309,14 @@ class PurchaseOrder(models.Model):
         # are taken with the company of the order
         # if not defined, with_company doesn't change anything.
         self = self.with_company(self.company_id)
+        default_currency = self._context.get("default_currency_id")
         if not self.partner_id:
             self.fiscal_position_id = False
-            self.currency_id = self.env.company.currency_id.id
+            self.currency_id = default_currency or self.env.company.currency_id.id
         else:
             self.fiscal_position_id = self.env['account.fiscal.position'].get_fiscal_position(self.partner_id.id)
             self.payment_term_id = self.partner_id.property_supplier_payment_term_id.id
-            self.currency_id = self.partner_id.property_purchase_currency_id.id or self.env.company.currency_id.id
+            self.currency_id = default_currency or self.partner_id.property_purchase_currency_id.id or self.env.company.currency_id.id
         return {}
 
     @api.onchange('fiscal_position_id', 'company_id')
@@ -474,7 +475,8 @@ class PurchaseOrder(models.Model):
         for line in self.order_line:
             # Do not add a contact as a supplier
             partner = self.partner_id if not self.partner_id.parent_id else self.partner_id.parent_id
-            if line.product_id and partner not in line.product_id.seller_ids.mapped('name') and len(line.product_id.seller_ids) <= 10:
+            already_seller = (partner | self.partner_id) & line.product_id.seller_ids.mapped('name')
+            if line.product_id and not already_seller and len(line.product_id.seller_ids) <= 10:
                 # Convert the price in the right currency.
                 currency = partner.property_purchase_currency_id or self.env.company.currency_id
                 price = self.currency_id._convert(line.price_unit, currency, line.company_id, line.date_order or fields.Date.today(), round=False)
@@ -1009,7 +1011,7 @@ class PurchaseOrderLine(models.Model):
         else:
             return self.invoice_lines
 
-    @api.depends('product_id')
+    @api.depends('product_id', 'product_id.type')
     def _compute_qty_received_method(self):
         for line in self:
             if line.product_id and line.product_id.type in ['consu', 'service']:
@@ -1109,7 +1111,8 @@ class PurchaseOrderLine(models.Model):
                     date=rec.date_order,
                     company_id=rec.company_id.id,
                 )
-                rec.account_analytic_id = default_analytic_account.analytic_id
+                if default_analytic_account:
+                    rec.account_analytic_id = default_analytic_account.analytic_id
 
     @api.depends('product_id', 'date_order')
     def _compute_analytic_tag_ids(self):
@@ -1122,7 +1125,8 @@ class PurchaseOrderLine(models.Model):
                     date=rec.date_order,
                     company_id=rec.company_id.id,
                 )
-                rec.analytic_tag_ids = default_analytic_account.analytic_tag_ids
+                if default_analytic_account:
+                    rec.analytic_tag_ids = default_analytic_account.analytic_tag_ids
 
     @api.onchange('product_id')
     def onchange_product_id(self):

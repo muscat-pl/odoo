@@ -12,6 +12,7 @@ const TableOfContent = publicWidget.Widget.extend({
      * @override
      */
     async start() {
+        this._stripNavbarStyles();
         await this._super(...arguments);
         this.$scrollingElement = $().getScrollingElement();
         this.previousPosition = -1;
@@ -34,6 +35,23 @@ const TableOfContent = publicWidget.Widget.extend({
     /**
      * @private
      */
+    _stripNavbarStyles() {
+        // TODO Introduce a `disabledInTranslateMode` flag instead.
+        // Ignore in translation mode.
+        if (this.el.querySelector('[data-oe-translation-id]')) {
+            return;
+        }
+
+        // This is needed for styles added on translations when the master text
+        // has no style.
+        for (const el of this.el.querySelectorAll('.s_table_of_content_navbar .table_of_content_link')) {
+            const text = el.textContent; // Get text from el.
+            el.textContent = text; // Replace all of el's content with that text.
+        }
+    },
+    /**
+     * @private
+     */
     _updateTableOfContentNavbarPosition() {
         let position = 0;
         const $fixedElements = $('.o_top_fixed_element');
@@ -48,8 +66,12 @@ const TableOfContent = publicWidget.Widget.extend({
         this.$target.find('.s_table_of_content_navbar').css('maxHeight', isHorizontalNavbar ? '' : `calc(100vh - ${position + 40}px)`);
         if (this.previousPosition !== position) {
             // The scrollSpy must be destroyed before calling it again.
-            // Otherwise the call has no effect.
-            this.$scrollingElement.scrollspy('dispose');
+            // Otherwise the call has no effect. We also need to be sure that
+            // a scrollSpy instance exists to avoid targeting elements outside
+            // the table of content navbar on scrollSpy methods.
+            if (this.$scrollingElement.data('bs.scrollspy')) {
+                this.$scrollingElement.scrollspy('dispose');
+            }
             this.$scrollingElement.scrollspy({
                 target: '.s_table_of_content_navbar',
                 method: 'offset',

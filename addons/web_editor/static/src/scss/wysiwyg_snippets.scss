@@ -246,6 +246,14 @@ body.editor_enable.editor_has_snippets {
 
     &.o_loaded {
         transform: none;
+        > .o_we_customize_panel .oe-toolbar {
+            #style.dropdown, #font-size.dropdown {
+                > .dropdown-menu {
+                    overflow-y: scroll;
+                    max-height: 280px;
+                }
+            }
+        }
     }
 
     *::selection {
@@ -1694,6 +1702,21 @@ body.editor_enable.editor_has_snippets {
                 background-color: $o-we-sidebar-bg;
             }
         }
+
+        div.o_we_invisible_root_parent {
+            padding-bottom: 3px;
+        }
+
+        ul {
+            list-style: none;
+            padding-inline-start: 15px;
+            margin-bottom: $o-we-sidebar-content-field-spacing - 3px;
+
+            div.o_we_invisible_entry {
+                padding-top: 3px;
+                padding-bottom: 3px;
+            }
+        }
     }
 
     &.o_we_backdrop {
@@ -1704,8 +1727,14 @@ body.editor_enable.editor_has_snippets {
 
             &::after {
                 content: "";
-                @include o-position-absolute(0, 0, 0, 0);
+                // We use a "sticky" position because it ensures that the
+                // backdrop covers the entire "customize panel" element, even
+                // when it has a vertical scrollbar and is scrolled to the
+                // bottom.
+                @include o-position-sticky(auto, 0, 0, 0);
                 display: block;
+                height: 100vh;
+                margin-top: -100vh;
                 pointer-events: none;
                 background: $o-we-sidebar-content-backdrop-bg;
             }
