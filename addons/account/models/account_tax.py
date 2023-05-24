@@ -544,6 +544,18 @@ class AccountTax(models.Model):
         # taxes.
         skip_checkpoint = False
 
+        # TODO
+        # CUSTOMIZATIONS - TO REMOVE
+        params = self._context.get('params', False)
+        if params:
+            model = params.get('model', False)
+            obj_id = params.get('id', False)
+            if model == 'sale.order' and obj_id:
+                so = self.env['sale.order'].browse(obj_id)
+                if so and so.team_id.id == 19:
+                    skip_checkpoint = True
+        # CUSTOMIZATIONS - TO REMOVE
+
         # Get product tags, account.account.tag objects that need to be injected in all
         # the tax_tag_ids of all the move lines created by the compute all for this product.
         product_tag_ids = product.account_tag_ids.ids if product else []
