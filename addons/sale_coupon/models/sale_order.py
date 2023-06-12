@@ -156,7 +156,8 @@ class SaleOrder(models.Model):
         # In case there is a tax set on the promotion product, we give priority to it.
         # This allow manual overwrite of taxes for promotion.
         if program.discount_line_product_id.taxes_id:
-            line_taxes = self.fiscal_position_id.map_tax(program.discount_line_product_id.taxes_id) if self.fiscal_position_id else program.discount_line_product_id.taxes_id
+            taxes_id = program.discount_line_product_id.taxes_id.filtered_domain([('company_id.id', '=', self.company_id.id)])
+            line_taxes = self.fiscal_position_id.map_tax(taxes_id) if self.fiscal_position_id else taxes_id
             lines = self._get_base_order_lines(program)
             discount_amount = min(
                 sum(lines.mapped(lambda l: l.price_reduce * l.product_uom_qty)), discount_amount
@@ -410,7 +411,7 @@ class SaleOrder(models.Model):
 
             # Check commit 6bb42904a03 for next if/else
             # Remove reward line if price or qty equal to 0
-            if values['product_uom_qty'] and values['price_unit']:
+            if values['product_uom_qty']: # and values['price_unit']:
                 lines.write(values)
             else:
                 if program.reward_type != 'free_shipping':
