@@ -88,7 +88,7 @@ msgstr "Template Bagan Akun"
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_stock_move__account_move_ids
 msgid "Account Move"
-msgstr ""
+msgstr "Account Move"
 
 #. module: stock_account
 #: model_terms:ir.ui.view,arch_db:stock_account.view_category_property_form
@@ -472,7 +472,7 @@ msgstr "Kategori Produk"
 #. module: stock_account
 #: model:ir.model,name:stock_account.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr ""
+msgstr "Pergerakan Produk (Baris Pergerakan Stok)"
 
 #. module: stock_account
 #: code:addons/stock_account/models/product.py:0
@@ -618,7 +618,7 @@ msgstr "Permintaan Stok untuk Perhitungan Stok Barang"
 #. module: stock_account
 #: model:ir.actions.act_window,name:stock_account.stock_valuation_layer_action
 msgid "Stock Valuation"
-msgstr ""
+msgstr "Stock Valuation"
 
 #. module: stock_account
 #: model:ir.model.fields,field_description:stock_account.field_product_category__property_stock_valuation_account_id

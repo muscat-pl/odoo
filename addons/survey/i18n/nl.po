@@ -1912,7 +1912,7 @@ msgstr "Fruit en groenten"
 #. module: survey
 #: model:ir.model,name:survey.model_gamification_badge
 msgid "Gamification Badge"
-msgstr "Gamification badge"
+msgstr "Gamificatie badge"
 
 #. module: survey
 #: model:ir.model,name:survey.model_gamification_challenge
@@ -4780,6 +4780,16 @@ msgid ""
 msgstr ""
 "Je kunt alleen certificeringen maken voor enquêtes die een score mechanisme "
 "hebben."
+
+#. module: survey
+#: code:addons/survey/models/survey_question.py:0
+#, python-format
+msgid ""
+"You cannot delete questions from surveys \"%(survey_names)s\" while live "
+"sessions are in progress."
+msgstr ""
+"Je kan de vragen van de enquêtes \"%(survey_names)s\"  niet verwijderen "
+"tijdens live sessies."
 
 #. module: survey
 #: code:addons/survey/models/survey_survey.py:0

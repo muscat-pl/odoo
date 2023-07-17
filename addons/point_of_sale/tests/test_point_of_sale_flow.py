@@ -1474,3 +1474,134 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         order_payment.with_context(**payment_context).check()
         current_session.action_pos_session_closing_control()
         self.assertEqual(current_session.picking_ids.move_line_ids.owner_id.id, self.partner1.id)
+
+    def test_order_refund_with_invoice(self):
+        """This test make sure that credit notes of pos orders are correctly
+           linked to the original invoice."""
+        self.pos_config.open_session_cb(check_coa=False)
+        current_session = self.pos_config.current_session_id
+
+        order_data = {'data':
+          {'amount_paid': 450,
+           'amount_tax': 0,
+           'amount_return': 0,
+           'amount_total': 450,
+           'creation_date': fields.Datetime.to_string(fields.Datetime.now()),
+           'fiscal_position_id': False,
+           'pricelist_id': self.pos_config.available_pricelist_ids[0].id,
+           'lines': [[0, 0, {
+               'discount': 0,
+               'pack_lot_ids': [],
+               'price_unit': 450.0,
+               'product_id': self.product3.id,
+               'price_subtotal': 450.0,
+               'price_subtotal_incl': 450.0,
+               'tax_ids': [[6, False, []]],
+               'qty': 1,
+           }]],
+           'name': 'Order 12345-123-1234',
+           'partner_id': self.partner1.id,
+           'pos_session_id': current_session.id,
+           'sequence_number': 2,
+           'statement_ids': [[0, 0, {
+               'amount': 450,
+               'name': fields.Datetime.now(),
+               'payment_method_id': self.cash_payment_method.id
+           }]],
+           'uid': '12345-123-1234',
+           'user_id': self.env.uid,
+           'to_invoice': True, }
+        }
+        order = self.PosOrder.create_from_ui([order_data])
+        order = self.PosOrder.browse(order[0]['id'])
+
+        refund_id = order.refund()['res_id']
+        refund = self.PosOrder.browse(refund_id)
+        context_payment = {"active_ids": refund.ids, "active_id": refund.id}
+        refund_payment = self.PosMakePayment.with_context(**context_payment).create({
+            'amount': refund.amount_total,
+            'payment_method_id': self.cash_payment_method.id
+        })
+        refund_payment.with_context(**context_payment).check()
+        refund.action_pos_order_invoice()
+        #get last invoice created
+        current_session.action_pos_session_closing_control()
+        invoices = self.env['account.move'].search([('move_type', '=', 'out_invoice')], order='id desc', limit=1)
+        credit_notes = self.env['account.move'].search([('move_type', '=', 'out_refund')], order='id desc', limit=1)
+        self.assertEqual(credit_notes.ref, "Reversal of: "+invoices.name)
+        self.assertEqual(credit_notes.reversed_entry_id.id, invoices.id)
+
+    def test_order_total_subtotal_account_line_values(self):
+        self.tax1 = self.env['account.tax'].create({
+            'name': 'Tax 1',
+            'amount': 10,
+            'amount_type': 'percent',
+            'type_tax_use': 'sale',
+        })
+        #create an account to be used as income account
+        self.account1 = self.env['account.account'].create({
+            'name': 'Account 1',
+            'code': 'AC1',
+            'user_type_id': self.env.ref('account.data_account_type_revenue').id,
+            'reconcile': True,
+        })
+
+        self.product1 = self.env['product.product'].create({
+            'name': 'Product A',
+            'type': 'product',
+            'taxes_id': [(6, 0, self.tax1.ids)],
+            'categ_id': self.env.ref('product.product_category_all').id,
+            'property_account_income_id': self.account1.id,
+        })
+        self.product2 = self.env['product.product'].create({
+            'name': 'Product B',
+            'type': 'product',
+            'taxes_id': [(6, 0, self.tax1.ids)],
+            'categ_id': self.env.ref('product.product_category_all').id,
+            'property_account_income_id': self.account1.id,
+        })
+        self.pos_config.open_session_cb(check_coa=False)
+        #create an order with product1
+        order = self.PosOrder.create({
+            'company_id': self.env.company.id,
+            'session_id': self.pos_config.current_session_id.id,
+            'partner_id': self.partner1.id,
+            'lines': [(0, 0, {
+                'name': "OL/0001",
+                'product_id': self.product1.id,
+                'price_unit': 100,
+                'discount': 0,
+                'qty': 1,
+                'tax_ids': [[6, False, [self.tax1.id]]],
+                'price_subtotal': 100,
+                'price_subtotal_incl': 110,
+            }), (0, 0, {
+                'name': "OL/0002",
+                'product_id': self.product2.id,
+                'price_unit': 100,
+                'discount': 0,
+                'qty': 1,
+                'tax_ids': [[6, False, [self.tax1.id]]],
+                'price_subtotal': 100,
+                'price_subtotal_incl': 110,
+            })],
+            'pricelist_id': self.pos_config.pricelist_id.id,
+            'amount_paid': 220.0,
+            'amount_total': 220.0,
+            'amount_tax': 20.0,
+            'amount_return': 0.0,
+            'to_invoice': False,
+            })
+        #make payment
+        payment_context = {"active_ids": order.ids, "active_id": order.id}
+        order_payment = self.PosMakePayment.with_context(**payment_context).create({
+            'amount': order.amount_total,
+            'payment_method_id': self.cash_payment_method.id
+        })
+        order_payment.with_context(**payment_context).check()
+        session_id = self.pos_config.current_session_id
+        self.pos_config.current_session_id.action_pos_session_closing_control()
+        #get journal entries created
+        aml = self.env['pos.session'].browse(session_id.id).move_id.line_ids.filtered(lambda x: x.account_id == self.account1 and x.tax_ids == self.tax1)
+        self.assertEqual(aml.price_total, 220)
+        self.assertEqual(aml.price_subtotal, 200)

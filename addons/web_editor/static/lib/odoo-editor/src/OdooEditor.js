@@ -152,15 +152,7 @@ export const CLIPBOARD_WHITELISTS = {
     ],
     attributes: ['class', 'href', 'src', 'target'],
     styledTags: ['SPAN', 'B', 'STRONG', 'I', 'S', 'U', 'FONT'],
-    styles: {
-        'text-decoration': { defaultValues: ['', 'none'] },
-        'font-weight': { defaultValues: ['', '400'] },
-        'background-color': { defaultValues: ['', '#fff', '#ffffff', 'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)'] },
-        'color': { defaultValues: ['', '#000', '#000000', 'rgb(0, 0, 0)', 'rgba(0, 0, 0, 1)'] },
-        'font-style': { defaultValues: ['', 'none', 'normal'] },
-        'text-decoration-line': { defaultValues: ['', 'none'] },
-        'font-size': { defaultValues: ['', '16px'] },
-    }
+    styles: ['text-decoration', 'font-weight', 'background-color', 'color', 'font-style', 'text-decoration-line', 'font-size']
 };
 
 function defaultOptions(defaultObject, object) {
@@ -652,7 +644,7 @@ export class OdooEditor extends EventTarget {
                             excludedClasses.push(klass);
                         }
                     }
-                    if (excludedClasses.every(c => this.options.renderingClasses.includes(c))) {
+                    if (excludedClasses.length && excludedClasses.every(c => this.options.renderingClasses.includes(c))) {
                         continue;
                     }
                 }
@@ -2225,8 +2217,8 @@ export class OdooEditor extends EventTarget {
         const editorRect = this.editable.getBoundingClientRect();
         const parentContextRect = this.options.getContextFromParentRect();
         const editorTopPos = Math.max(0, editorRect.top);
-        const scrollX = this.document.defaultView.scrollX;
-        const scrollY = this.document.defaultView.scrollY;
+        const scrollX = document.defaultView.scrollX;
+        const scrollY = document.defaultView.scrollY;
 
         // Get left position.
         let left = correctedSelectionRect.left + OFFSET;
@@ -2235,8 +2227,8 @@ export class OdooEditor extends EventTarget {
         // Ensure the toolbar doesn't overflow the editor on the right.
         left = Math.min(window.innerWidth - OFFSET - toolbarWidth, left);
         // Offset left to compensate for parent context position (eg. Iframe).
-        left += parentContextRect.left;
-        this.toolbar.style.left = scrollX + left + 'px';
+        const adjustedLeft = left + parentContextRect.left;
+        this.toolbar.style.left = scrollX + adjustedLeft + 'px';
 
         // Get top position.
         let top = correctedSelectionRect.top - toolbarHeight - OFFSET;
@@ -2282,6 +2274,23 @@ export class OdooEditor extends EventTarget {
 
         for (const tableElement of container.querySelectorAll('table')) {
             tableElement.classList.add('table', 'table-bordered');
+        }
+
+        const progId = container.querySelector('meta[name="ProgId"]')
+        if (progId && progId.content === 'Excel.Sheet') {
+            // Microsoft Excel keeps table style in a <style> tag with custom
+            // classes. The following lines parse that style and apply it to the
+            // style attribute of <td> tags with matching classes.
+            const xlStylesheet = container.querySelector('style');
+            const xlNodes = container.querySelectorAll("[class*=xl],[class*=font]");
+            for (const xlNode of xlNodes) {
+                for (const xlClass of xlNode.classList) {
+                    // Regex captures a CSS rule definition for that xlClass.
+                    const xlStyle = xlStylesheet.textContent.match(`.${xlClass}[^\{]*\{(?<xlStyle>[^\}]*)\}`)
+                        .groups.xlStyle.replace('background:', 'background-color:');
+                    xlNode.setAttribute('style', xlNode.style.cssText + ';' + xlStyle)
+                }
+            }
         }
 
         for (const child of [...container.childNodes]) {
@@ -2331,6 +2340,46 @@ export class OdooEditor extends EventTarget {
                 }
             }
         } else if (node.nodeType !== Node.TEXT_NODE) {
+            if (node.nodeName === 'TD' && node.hasAttribute('style')) {
+                // TD tags do not support style in v15, move style to children
+                // or new SPAN.
+                const span = node.childNodes.length === 1 && node.firstChild.nodeName === 'SPAN'
+                    ? node.firstChild
+                    : this.document.createElement('SPAN');
+                // Background-color on TD (cell) != on span (text).
+                // Prevent it from being copied from cell to text.
+                node.style.backgroundColor = null;
+                for (const styleText of node.getAttribute('style').split(';')) {
+                    // Give parent's style to child, unless already set.
+                    const [styleName, styleValue] = styleText.split(':').map(x => x.trim());
+                    if (!span.style[styleName]) {
+                        span.style[styleName] = styleValue;
+                    }
+                }
+                if (span.parentNode !== node) {
+                    // A new span was needed to apply the styles. 
+                    // Use it to wrap the nodes in the cell.
+                    span.append(...node.childNodes);
+                    node.append(span);
+                }
+            } else if (node.nodeName === 'FONT') {
+                // FONT tags have some style information in custom attributes,
+                // this maps them to the style attribute.
+                if (node.hasAttribute('color') && !node.style['color']) {
+                    node.style['color'] = node.getAttribute('color');
+                }
+                if (node.hasAttribute('size') && !node.style['font-size']) {
+                    // FONT size uses non-standard numeric values.
+                    node.style['font-size'] = +node.getAttribute('size') + 10 + 'pt';
+                }
+            } else if (['S', 'U'].includes(node.nodeName) && node.childNodes.length === 1 && node.firstChild.nodeName === 'FONT') {
+                // S and U tags sometimes contain FONT tags. We prefer the
+                // strike to adopt the style of the text, so we invert them.
+                const fontNode = node.firstChild;
+                node.before(fontNode);
+                node.replaceChildren(...fontNode.childNodes);
+                fontNode.appendChild(node);
+            }
             // Remove all illegal attributes and classes from the node, then
             // clean its children.
             for (const attribute of [...node.attributes]) {
@@ -2338,9 +2387,7 @@ export class OdooEditor extends EventTarget {
                 if (CLIPBOARD_WHITELISTS.styledTags.includes(node.nodeName) && attribute.name === 'style') {
                     const spanInlineStyles = attribute.value.split(';').map(x => x.trim());
                     const allowedSpanInlineStyles = spanInlineStyles.filter(rawStyle => {
-                        const [styleName, styleValue] = rawStyle.split(':');
-                        const style = CLIPBOARD_WHITELISTS.styles[styleName.trim()];
-                        return style && !style.defaultValues.includes(styleValue.trim());
+                        return CLIPBOARD_WHITELISTS.styles.includes(rawStyle.split(':')[0].trim());
                     });
                     node.removeAttribute(attribute.name);
                     if (allowedSpanInlineStyles.length > 0) {
@@ -2381,7 +2428,7 @@ export class OdooEditor extends EventTarget {
                 okClass instanceof RegExp ? okClass.test(item) : okClass === item,
             );
         } else {
-            const allowedSpanStyles = Object.keys(CLIPBOARD_WHITELISTS.styles).map(s => `span[style*="${s}"]`);
+            const allowedSpanStyles = CLIPBOARD_WHITELISTS.styles.map(s => `span[style*="${s}"]`);
             return (
                 item.nodeType === Node.TEXT_NODE ||
                 (

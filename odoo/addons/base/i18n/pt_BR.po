@@ -8,8 +8,8 @@
 # grazziano <gra.negocia@gmail.com>, 2021
 # Ruani Lazzarotto <ruanilazzarotto@gmail.com>, 2023
 # douglas custodio <douglascstd@yahoo.com>, 2023
-# Kevilyn Rosa, 2023
 # Éder Brito <britoederr@gmail.com>, 2023
+# Kevilyn Rosa, 2023
 # Layna Nascimento, 2023
 # 
 msgid ""
@@ -9492,6 +9492,10 @@ msgid ""
 "a periodic and automatic synchronization of their bank statements.\n"
 "    "
 msgstr ""
+"\n"
+"Com esse módulo, os usuários poderão vincular os diários bancários às suas\n"
+"contas bancárias online (para instituições bancárias compatíveis) e configurar\n"
+"uma sincronização periódica e automática de seus extratos bancários."
 
 #. module: base
 #: model:ir.module.module,description:base.module_payment_sips
@@ -11828,6 +11832,8 @@ msgid ""
 "All our contractual relations will be governed exclusively by United States "
 "law."
 msgstr ""
+"Todas as nossas relações contratuais serão regidas exclusivamente pela "
+"legislação dos Estados Unidos."
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_partner__lang
@@ -11966,7 +11972,7 @@ msgstr "Permite usar Reconciliação com o recurso de Pagamentos em Lote"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_amazon
 msgid "Amazon Connector"
-msgstr "Amazon Connector"
+msgstr "Conector Amazon"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_amazon_taxcloud
@@ -12174,7 +12180,7 @@ msgstr "Reuniões Geração de Leads"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_appointment
 msgid "Appointments"
-msgstr "Reuniões"
+msgstr "Compromissos"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_appraisal_skills
@@ -12424,7 +12430,7 @@ msgstr ""
 #: model:ir.module.category,name:base.module_category_human_resources_attendances
 #: model:ir.module.module,shortdesc:base.module_hr_attendance
 msgid "Attendances"
-msgstr "Frequência"
+msgstr "Controle de Presença"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_attendance_mobile
@@ -12607,28 +12613,28 @@ msgstr "Avatar"
 #: model:ir.model.fields,field_description:base.field_res_partner__avatar_1024
 #: model:ir.model.fields,field_description:base.field_res_users__avatar_1024
 msgid "Avatar 1024"
-msgstr ""
+msgstr "Avatar 1024"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_avatar_mixin__avatar_128
 #: model:ir.model.fields,field_description:base.field_res_partner__avatar_128
 #: model:ir.model.fields,field_description:base.field_res_users__avatar_128
 msgid "Avatar 128"
-msgstr ""
+msgstr "Avatar 128"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_avatar_mixin__avatar_256
 #: model:ir.model.fields,field_description:base.field_res_partner__avatar_256
 #: model:ir.model.fields,field_description:base.field_res_users__avatar_256
 msgid "Avatar 256"
-msgstr ""
+msgstr "Avatar 256"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_avatar_mixin__avatar_512
 #: model:ir.model.fields,field_description:base.field_res_partner__avatar_512
 #: model:ir.model.fields,field_description:base.field_res_users__avatar_512
 msgid "Avatar 512"
-msgstr ""
+msgstr "Avatar 512"
 
 #. module: base
 #: model:ir.model,name:base.model_avatar_mixin
@@ -12814,7 +12820,7 @@ msgstr "Barbados"
 #: model:ir.module.module,shortdesc:base.module_barcodes
 #: model:ir.module.module,shortdesc:base.module_stock_barcode
 msgid "Barcode"
-msgstr "Código de barras"
+msgstr "Código de Barras"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
@@ -14241,17 +14247,17 @@ msgstr "Dados da Companhia"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__company_details
 msgid "Company Details"
-msgstr "Detalhes da Empresa"
+msgstr "Informações da empresa"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__favicon
 msgid "Company Favicon"
-msgstr "Ícone da Empresa"
+msgstr "Ícone da empresa"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__logo
 msgid "Company Logo"
-msgstr "Logo da Empresa"
+msgstr "Logo da empresa"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__name
@@ -14296,7 +14302,7 @@ msgstr "Registro da Empresa"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__report_header
 msgid "Company Tagline"
-msgstr "Slogan da Empresa"
+msgstr "Slogan da empresa"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner__company_type
@@ -14589,7 +14595,7 @@ msgstr "Etiqueta de Contato"
 #: model:ir.actions.act_window,name:base.action_partner_category_form
 #: model_terms:ir.ui.view,arch_db:base.view_partner_category_list
 msgid "Contact Tags"
-msgstr "Tags do Contato"
+msgstr "Marcadores do contato"
 
 #. module: base
 #: model:ir.actions.act_window,name:base.action_partner_title_contact
@@ -14873,7 +14879,7 @@ msgstr "Criar uma Tag de Contato"
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_partner_form
 msgid "Create a Contact in your address book"
-msgstr "Criar um Contato em seu livro de endereços"
+msgstr "Criar um contato em sua lista de contatos"
 
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_country_group
@@ -16696,7 +16702,7 @@ msgstr "Servidor E-mail"
 #: model:ir.module.category,name:base.module_category_marketing_email_marketing
 #: model:ir.module.module,shortdesc:base.module_mass_mailing
 msgid "Email Marketing"
-msgstr "Email de Marketing"
+msgstr "Marketing de E-mail"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_users__signature
@@ -16847,7 +16853,7 @@ msgstr "Recursos em contatos Enterprise"
 #. module: base
 #: model:ir.module.module,summary:base.module_website
 msgid "Enterprise website builder"
-msgstr "Enterprise website builder"
+msgstr "Criador de Sites Enterprise"
 
 #. module: base
 #: model:res.partner.industry,name:base.res_partner_industry_R
@@ -17765,7 +17771,7 @@ msgid ""
 "                                                          Useful to (hard) reset broken views or to read arch from file in dev-xml mode."
 msgstr ""
 "Arquivo de onde a visualização se origina.\n"
-"                                                          Útil para redefinir visões quebradas (difícil) ou para ler o arco do arquivo no modo dev-xml."
+"                                                          Útil para fazer uma reinicialização (forçada) de visualizações quebradas ou para ler o arch do arquivo no modo dev-xml."
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window__filter
@@ -18297,7 +18303,7 @@ msgstr "Geral"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_company_form
 msgid "General Information"
-msgstr "Informações Gerais"
+msgstr "Informações gerais"
 
 #. module: base
 #: model:ir.ui.menu,name:base.menu_config
@@ -18491,7 +18497,7 @@ msgstr "Gibraltar"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_gift_card
 msgid "Gift Card"
-msgstr ""
+msgstr "Gift Card"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_pos_gift_card
@@ -19787,7 +19793,7 @@ msgstr "Usuários Inativos"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_asset__directive__include
 msgid "Include"
-msgstr ""
+msgstr "Incluir"
 
 #. module: base
 #: code:addons/models.py:0
@@ -19892,7 +19898,7 @@ msgstr "Indonesian - Accounting"
 #. module: base
 #: model:ir.actions.act_window,name:base.res_partner_industry_action
 msgid "Industries"
-msgstr "Indústrias"
+msgstr "Segmentos"
 
 #. module: base
 #: model:ir.model,name:base.model_res_partner_industry
@@ -20384,7 +20390,7 @@ msgstr "Endereço de Cobrança"
 #. module: base
 #: model:ir.module.module,summary:base.module_account
 msgid "Invoices & Payments"
-msgstr "Fatyras & Pagamentos"
+msgstr "Faturas & Pagamentos"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_documents_account
@@ -21193,7 +21199,7 @@ msgstr "Vamos lá"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_company_step
 msgid "Let's start!"
-msgstr "Vamos Começar!"
+msgstr "Vamos começar!"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__letter
@@ -21274,7 +21280,7 @@ msgstr "Campo de Vínculo"
 #: model:ir.module.module,shortdesc:base.module_link_tracker
 #: model:ir.module.module,shortdesc:base.module_website_links
 msgid "Link Tracker"
-msgstr "Monitoramento de URL"
+msgstr "Rastreio de Links"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_timesheet_grid_holidays
@@ -21336,7 +21342,7 @@ msgstr "Lithuania - Accounting"
 #: model:ir.module.category,name:base.module_category_website_live_chat
 #: model:ir.module.module,shortdesc:base.module_im_livechat
 msgid "Live Chat"
-msgstr "Live Chat"
+msgstr "Chat ao Vivo"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_currency_rate_live
@@ -21520,7 +21526,7 @@ msgstr "Mail Enterprise"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_mail_group
 msgid "Mail Group"
-msgstr ""
+msgstr "Grupo de e-mails"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_mail_mobile
@@ -21885,7 +21891,7 @@ msgstr "Manage your stock and logistics activities"
 #: model:res.partner.industry,name:base.res_partner_industry_C
 #: model_terms:ir.ui.view,arch_db:base.user_groups_view
 msgid "Manufacturing"
-msgstr "Manufatura"
+msgstr "Fabricação"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_mrp_product_expiry
@@ -21942,7 +21948,7 @@ msgstr "Marketing"
 #: model:ir.module.category,name:base.module_category_marketing_marketing_automation
 #: model:ir.module.module,shortdesc:base.module_marketing_automation
 msgid "Marketing Automation"
-msgstr "Automação de Marketing"
+msgstr "MKT: Automação"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_marketing_automation
@@ -25618,13 +25624,13 @@ msgstr "Categoria superior(pai)"
 #: model:ir.model.fields,field_description:base.field_base_partner_merge_automatic_wizard__group_by_parent_id
 #: model:ir.model.fields,field_description:base.field_res_company__parent_id
 msgid "Parent Company"
-msgstr "Empresa Superior(Pai)"
+msgstr "Empresa matriz"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_ui_menu__parent_id
 #: model:ir.model.fields,field_description:base.field_wizard_ir_model_menu_create__menu_id
 msgid "Parent Menu"
-msgstr "Menu Superior(pai)"
+msgstr "Menu primário"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_ui_menu__parent_path
@@ -26158,7 +26164,7 @@ msgstr "Prefixo do registro para a sequência"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_asset__directive__prepend
 msgid "Prepend"
-msgstr ""
+msgstr "Preceder"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_website_twitter_wall
@@ -26282,7 +26288,7 @@ msgstr "Imagens do Produto"
 #: model:ir.module.category,name:base.module_category_manufacturing_product_lifecycle_management_(plm)
 #: model:ir.module.module,shortdesc:base.module_mrp_plm
 msgid "Product Lifecycle Management (PLM)"
-msgstr "Gestão do Ciclo de Vida do Produto (PLM)"
+msgstr "Ciclo de Vida do Produto (PLM)"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_product_matrix
@@ -27202,7 +27208,7 @@ msgstr "Data de referência"
 #. module: base
 #: model:ir.module.category,name:base.module_category_human_resources_referrals
 msgid "Referrals"
-msgstr "Referências"
+msgstr "Indicações"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner__parent_id
@@ -27312,7 +27318,7 @@ msgstr "Remover a ação contextual relacionada a este relatório"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_renting
 msgid "Rental"
-msgstr "Aluguel"
+msgstr "Locação"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_stock_renting
@@ -27510,7 +27516,7 @@ msgstr "Nome do Recurso"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_pos_restaurant
 msgid "Restaurant"
-msgstr "restauração"
+msgstr "Restaurante"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_pos_restaurant
@@ -27653,7 +27659,7 @@ msgstr "SEPA Payments for Payroll"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_mass_mailing_sms
 msgid "SMS Marketing"
-msgstr "Marketing SMS"
+msgstr "Marketing por SMS"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_marketing_automation_sms
@@ -27942,7 +27948,7 @@ msgstr "Despesas de Vendas"
 #: model:ir.module.module,shortdesc:base.module_sales_team
 #: model:ir.module.module,summary:base.module_sales_team
 msgid "Sales Teams"
-msgstr "Equipes de Vendas"
+msgstr "Equipes de vendas"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_timesheet
@@ -28791,7 +28797,7 @@ msgstr "Social LinkedIn"
 #: model:ir.module.category,name:base.module_category_marketing_social_marketing
 #: model:ir.module.module,shortdesc:base.module_social
 msgid "Social Marketing"
-msgstr "Mídias Sociais"
+msgstr "Redes Sociais"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_social_media
@@ -29094,7 +29100,7 @@ msgstr "Situação"
 #: code:addons/base/static/src/js/res_config_settings.js:0
 #, python-format
 msgid "Stay Here"
-msgstr ""
+msgstr "Permanecer aqui"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_sequence__number_increment
@@ -29228,7 +29234,7 @@ msgstr "Structured Model Field"
 #: model:ir.module.category,name:base.module_category_customizations_studio
 #: model:ir.module.module,shortdesc:base.module_web_studio
 msgid "Studio"
-msgstr "Studio"
+msgstr "Estúdio"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mrp_subcontracting
@@ -29539,7 +29545,7 @@ msgstr "Logs de Tarefas"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__vat
 msgid "Tax ID"
-msgstr "ID do Imposto"
+msgstr "CPF/CNPJ"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale_taxcloud_delivery
@@ -29863,6 +29869,10 @@ msgid ""
 "order to be valid, any derogation must be expressly agreed to in advance in "
 "writing."
 msgstr ""
+"O cliente renuncia explicitamente a seus próprios termos e condições padrão,"
+" mesmo que tenham sido elaborados após estes termos e condições padrão de "
+"venda. Para que seja válida, qualquer derrogação deve ser expressamente "
+"acordada por escrito e com antecedência."
 
 #. module: base
 #: model:ir.model.constraint,message:base.constraint_res_country_code_uniq
@@ -30891,7 +30901,7 @@ msgstr "Para"
 #: model:ir.model.fields.selection,name:base.selection__ir_actions_todo__state__open
 #: model_terms:ir.ui.view,arch_db:base.config_wizard_step_view_search
 msgid "To Do"
-msgstr "A Fazer"
+msgstr "Lista de Tarefas"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_translation__state__to_translate
@@ -32589,7 +32599,7 @@ msgstr "Website Slides Helpdesk"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_studio
 msgid "Website Studio"
-msgstr "Website Studio"
+msgstr "Estúdio do Site"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_website
@@ -33138,7 +33148,8 @@ msgstr "Você pode tentar outro critério de busca."
 #. module: base
 #: model_terms:res.company,invoice_terms_html:base.main_company
 msgid "You should update this document to reflect your T&amp;C."
-msgstr "Você precisa atualizar esse documento para refletir seu T&amp;C."
+msgstr ""
+"Você deve atualizar este documento para refletir seus termos e condições."
 
 #. module: base
 #: code:addons/base/models/ir_module.py:0
@@ -33447,7 +33458,7 @@ msgstr "Conector Ebay"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale
 msgid "eCommerce"
-msgstr "eCommerce"
+msgstr "e-Commerce"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale_delivery
@@ -33458,7 +33469,7 @@ msgstr "eCommerce Delivery"
 #: model:ir.module.category,name:base.module_category_website_elearning
 #: model:ir.module.module,shortdesc:base.module_website_slides
 msgid "eLearning"
-msgstr "Cursos Online"
+msgstr "e-Learning"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_services_expenses
@@ -33483,7 +33494,7 @@ msgid ""
 "for record in self:\n"
 "        record['size'] = len(record.name)"
 msgstr ""
-"para gravar no próprio:\n"
+"para gravar no self:\n"
 "record['size'] = len(record.name)"
 
 #. module: base

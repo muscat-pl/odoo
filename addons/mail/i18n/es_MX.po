@@ -3,10 +3,11 @@
 # 	* mail
 # 
 # Translators:
-# Martin Trigaux, 2021
 # Braulio D. López Vázquez <bdl@odoo.com>, 2022
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2023
-# Lucia Pacheco <lpo@odoo.com>, 2023
+# Lucia Pacheco, 2023
+# Martin Trigaux, 2023
+# Fernanda Alvarez, 2023
 # 
 msgid ""
 msgstr ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-24 08:19+0000\n"
 "PO-Revision-Date: 2021-09-14 12:23+0000\n"
-"Last-Translator: Lucia Pacheco <lpo@odoo.com>, 2023\n"
+"Last-Translator: Fernanda Alvarez, 2023\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/odoo/teams/41243/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +27,7 @@ msgstr ""
 #: code:addons/mail/models/mail_channel.py:0
 #, python-format
 msgid " This channel is private. People must be invited to join it."
-msgstr "Este canal es privado. Hay que contar con una invitación para unirse."
+msgstr "Este canal es privado, debe recibir una invitación para unirse."
 
 #. module: mail
 #. openerp-web
@@ -933,6 +934,12 @@ msgstr "Seudónimos"
 #, python-format
 msgid "All"
 msgstr "Todos"
+
+#. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid "An access token must be provided for each attachment."
+msgstr "Se debe proporcionar un código de acceso para cada archivo adjunto."
 
 #. module: mail
 #: code:addons/mail/models/res_partner.py:0
@@ -2226,6 +2233,7 @@ msgstr "Desconectado de la llamada RTC por el servidor"
 #. module: mail
 #. openerp-web
 #: code:addons/mail/static/src/components/thread_view_topbar/thread_view_topbar.xml:0
+#: code:addons/mail/static/src/models/discuss/discuss.js:0
 #: model:ir.actions.client,name:mail.action_discuss
 #: model:ir.ui.menu,name:mail.mail_menu_technical
 #: model:ir.ui.menu,name:mail.menu_root_discuss
@@ -3366,7 +3374,8 @@ msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
 #: model:ir.model.fields,help:mail.field_res_partner__message_has_error
 #: model:ir.model.fields,help:mail.field_res_users__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr "Si está marcado, algunos mensajes presentan un error de entrega."
+msgstr ""
+"Si se encuentra seleccionado, algunos mensajes presentan un error de envío."
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_wizard_invite__send_mail
@@ -5063,7 +5072,7 @@ msgid ""
 "Once a message has been starred, you can come back and review it at any time"
 " here."
 msgstr ""
-"Una vez que se haya destacado un mensaje, puede volver a revisarlo aquí en "
+"Una vez que haya destacado un mensaje, puede volver a verlo aquí en "
 "cualquier momento."
 
 #. module: mail
@@ -5150,7 +5159,7 @@ msgstr "Abrir documento"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_alias_form
 msgid "Open Parent Document"
-msgstr "Abrir el documento padre"
+msgstr "Abrir el documento principal"
 
 #. module: mail
 #. openerp-web
@@ -5210,13 +5219,13 @@ msgid ""
 "Optional preferred server for outgoing mails. If not set, the highest "
 "priority one will be used."
 msgstr ""
-"Servidor preferido para los correos salientes (opcional). Si no se "
-"establece, se utilizará el de mayor prioridad."
+"Servidor preferido opcional para los correos salientes. Si no se establece, "
+"se utilizará el de mayor prioridad."
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_template__report_template
 msgid "Optional report to print and attach"
-msgstr "Informe opcional para imprimir y adjuntar"
+msgstr "Reporte opcional para imprimir y adjuntar"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_compose_message__lang
@@ -5388,7 +5397,7 @@ msgstr "Partner con información adicional para el reenvío del correo"
 #: model:ir.model.fields,field_description:mail.field_mail_mail__notified_partner_ids
 #: model:ir.model.fields,field_description:mail.field_mail_message__notified_partner_ids
 msgid "Partners with Need Action"
-msgstr "Partners con acción requerida"
+msgstr "Contactos con acción requerida"
 
 #. module: mail
 #. openerp-web
@@ -5558,7 +5567,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:mail.mail_notification_light
 #: model_terms:ir.ui.view,arch_db:mail.mail_notification_paynow
 msgid "Powered by"
-msgstr "Con tecnología de"
+msgstr "Con la tecnología de"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity_type__previous_type_ids
@@ -5576,7 +5585,7 @@ msgstr "Dirección de respuesta favorita"
 #, python-format
 msgid "Press a key to register it as the push-to-talk shortcut"
 msgstr ""
-"Presione una clave para registrarla como atajo para pulsar para hablar"
+"Presione una tecla para registrarla como atajo para pulsar para hablar"
 
 #. module: mail
 #. openerp-web
@@ -5711,7 +5720,7 @@ msgstr ""
 #: code:addons/mail/wizard/mail_compose_message.py:0
 #, python-format
 msgid "Re:"
-msgstr "Re:"
+msgstr "Asunto:"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_message_reaction__guest_id
@@ -6013,7 +6022,7 @@ msgstr "Nombre del reporte"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_activity__request_partner_id
 msgid "Requesting Partner"
-msgstr "Partner solicitante"
+msgstr "Contacto solicitante"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_res_users__res_users_settings_ids
@@ -6637,7 +6646,7 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Estado basado en actividades\n"
+"Estado según las actividades\n"
 "Vencida: ya pasó la fecha límite\n"
 "Hoy: hoy es la fecha de la actividad\n"
 "Planeada: futuras actividades."
@@ -6647,7 +6656,7 @@ msgstr ""
 #: code:addons/mail/static/src/components/chat_window_header/chat_window_header.xml:0
 #, python-format
 msgid "Stop adding users"
-msgstr "Dejar de añadir usuarios"
+msgstr "Dejar de agregar usuarios"
 
 #. module: mail
 #. openerp-web
@@ -6909,6 +6918,20 @@ msgstr ""
 "los impuestos del gobierno. Utilizado en algunas declaraciones legales."
 
 #. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid ""
+"The attachment %s does not exist or you do not have the rights to access it."
+msgstr ""
+"El archivo adjunto %s no existe o no tiene autorización para acceder. "
+
+#. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid "The attachment %s does not exist."
+msgstr "El archivo adjunto %s no existe."
+
+#. module: mail
 #: model:ir.model.constraint,message:mail.constraint_mail_channel_uuid_unique
 msgid "The channel UUID must be unique"
 msgstr "El UUID del canal debe ser único"
@@ -6921,8 +6944,8 @@ msgid ""
 "%(alias_model_name)s. Choose another alias or change it on the linked model."
 msgstr ""
 "El seudónimo %(matching_alias_name)s del correo electrónico ya está "
-"vinculado con %(alias_model_name)s. Escoja otro seudónimo o cámbielo en el "
-"modelo vinculado."
+"vinculado con %(alias_model_name)s, elija otro o cámbielo en el modelo "
+"vinculado."
 
 #. module: mail
 #: code:addons/mail/models/mail_alias.py:0
@@ -6931,8 +6954,8 @@ msgid ""
 "The e-mail alias %(matching_alias_name)s is already used as "
 "%(alias_duplicate)s alias. Please choose another alias."
 msgstr ""
-"%(alias_duplicate)s ya está usando el seudónimo %(matching_alias_name)s de "
-"correo electrónico. Escoja otro."
+"El seudónimo %(alias_duplicate)s ya está usando el seudónimo "
+"%(matching_alias_name)s del correo electrónico, elija otro."
 
 #. module: mail
 #: code:addons/mail/models/mail_alias.py:0
@@ -6942,8 +6965,8 @@ msgid ""
 "%(document_name)s %(model_name)s. Choose another alias or change it on the "
 "other document."
 msgstr ""
-"El seudónimo %(matching_alias_name)s de correo electrónico ya lo está usando"
-" %(model_name)s%(document_name)s. Escoja otro o cambie el del otro "
+"El seudónimo %(matching_alias_name)s del correo electrónico ya lo está "
+"usando %(document_name)s %(model_name)s, elija otro o cambie el del otro "
 "documento."
 
 #. module: mail
@@ -7107,7 +7130,7 @@ msgstr ""
 #: code:addons/mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js:0
 #, python-format
 msgid "This is their first connection. Wish them luck."
-msgstr "Esta es su primera conexión. Deséeles suerte."
+msgstr "Es la primera vez que se conecta, dele la bienvenida."
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_compose_message__auto_delete
@@ -7133,7 +7156,7 @@ msgstr "Este registro tiene una actividad de excepción."
 #: code:addons/mail/models/mail_channel_partner.py:0
 #, python-format
 msgid "This user can not be added in this channel"
-msgstr "No se puede añadir al usuario en este canal"
+msgstr "No se puede agregar al usuario a este canal"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_mail_search
@@ -7176,7 +7199,7 @@ msgstr "Para (correos electrónicos)"
 #: model:ir.model.fields,field_description:mail.field_mail_mail__recipient_ids
 #: model:ir.model.fields,field_description:mail.field_mail_template__partner_to
 msgid "To (Partners)"
-msgstr "Para (Partners)"
+msgstr "Para (contactos)"
 
 #. module: mail
 #: model:mail.activity.type,name:mail.mail_activity_data_todo
@@ -7373,15 +7396,15 @@ msgstr "Imposible conectar con el servidor SMTP"
 #, python-format
 msgid "Unable to log message, please configure the sender's email address."
 msgstr ""
-"No se puede registrar el mensaje, por favor modifique la dirección de correo"
-" electrónico del remitente."
+"No se puede registrar el mensaje, configure la dirección de correo "
+"electrónico del remitente."
 
 #. module: mail
 #: code:addons/mail/wizard/mail_wizard_invite.py:0
 #, python-format
 msgid "Unable to post message, please configure the sender's email address."
 msgstr ""
-"No se puede publicar el mensaje, por favor modifique la dirección de correo "
+"No se puede publicar el mensaje, configure la dirección de correo "
 "electrónico del remitente."
 
 #. module: mail
@@ -7414,8 +7437,8 @@ msgstr "Dejar de seguir"
 msgid ""
 "Unfortunately this email alias is already used, please choose a unique one"
 msgstr ""
-"Desafortunadamente, este seudónimo de correo ya está en uso. Por favor, "
-"elija otro."
+"Desafortunadamente, este seudónimo de correo ya está en uso. Seleccione "
+"otro."
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_activity_type__delay_unit
@@ -7476,7 +7499,7 @@ msgstr "Mensajes sin leer"
 #: code:addons/mail/static/src/components/thread_view_topbar/thread_view_topbar.xml:0
 #, python-format
 msgid "Unstar all"
-msgstr "Quitar todos de destacados"
+msgstr "Quitar todos de favoritos"
 
 #. module: mail
 #: code:addons/mail/models/mail_template.py:0
@@ -7539,7 +7562,7 @@ msgstr "Usar pulsar para hablar"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_res_config_settings__use_twilio_rtc_servers
 msgid "Use Twilio ICE servers"
-msgstr "Usar los servicios ICE de Twilio"
+msgstr "Usar los servidores ICE de Twilio"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__use_active_domain
@@ -7689,6 +7712,16 @@ msgstr ""
 "electrónico listo para usar (@mycompany.odoo.com)."
 
 #. module: mail
+#: code:addons/mail/models/mail_alias.py:0
+#, python-format
+msgid ""
+"Value for `mail.catchall.domain.allowed` cannot be validated.\n"
+"It should be a comma separated list of domains e.g. example.com,example.org."
+msgstr ""
+"No es posible validar el valor en `mail.catchall.domain.allowed`.\n"
+"Debe ser una lista de dominios separada por comas, por ejemplo: ejemplo.com,ejemplo.org."
+
+#. module: mail
 #. openerp-web
 #: code:addons/mail/static/src/components/attachment_viewer/attachment_viewer.xml:0
 #: code:addons/mail/static/src/xml/thread.xml:0
@@ -7739,7 +7772,7 @@ msgstr "Ver o unirse a canales"
 #: code:addons/mail/static/src/xml/thread.xml:0
 #, python-format
 msgid "Viewer"
-msgstr "Visor"
+msgstr "Visualizador"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.res_users_settings_view_form
@@ -7938,7 +7971,7 @@ msgstr "Solo puede usar el chat con usuarios existentes."
 #, python-format
 msgid "You can only chat with partners that have a dedicated user."
 msgstr ""
-"Solo puede usar el chat con los partners que tengan un usuario asignado."
+"Solo puede usar el chat con los contactos que tengan un usuario asignado."
 
 #. module: mail
 #. openerp-web
@@ -7971,8 +8004,8 @@ msgid ""
 "You cannot delete those groups, as the Whole Company group is required by "
 "other modules."
 msgstr ""
-"No se pueden eliminar estos grupos, ya que el grupo \"Toda la empresa\" es "
-"necesario para otros módulos."
+"No puede eliminar estos grupos, el grupo \"Toda la empresa\" es necesario "
+"para otros módulos."
 
 #. module: mail
 #: code:addons/mail/models/mail_alias.py:0
@@ -7981,8 +8014,8 @@ msgid ""
 "You cannot use anything else than unaccented latin characters in the alias "
 "address (%s)."
 msgstr ""
-"No puede usar otra cosa más que caracteres latinos sin acento en la "
-"dirección del seudónimo (%s)."
+"Solo puede utilizar caracteres latinos sin acento en la dirección del "
+"seudónimo (%s)."
 
 #. module: mail
 #: code:addons/mail/models/mail_thread_blacklist.py:0
@@ -7991,8 +8024,8 @@ msgid ""
 "You do not have the access right to unblacklist emails. Please contact your "
 "administrator."
 msgstr ""
-"No tiene los suficientes derechos de acceso para eliminar correos "
-"electrónicos de la lista negra. Contacte con su administrador."
+"No tiene los suficientes permisos de acceso para eliminar correos "
+"electrónicos de la lista negra. Contacte a su administrador."
 
 #. module: mail
 #: code:addons/mail/models/mail_thread.py:0
@@ -8010,7 +8043,7 @@ msgstr "Le asignaron al"
 #: code:addons/mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js:0
 #, python-format
 msgid "You have been invited to #%s"
-msgstr "Lo han invitado a #%s"
+msgstr "Le han invitado a #%s"
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_template__attachment_ids
@@ -8040,14 +8073,14 @@ msgstr "Canceló su suscripción a %s."
 #: code:addons/mail/static/src/components/welcome_view/welcome_view.xml:0
 #, python-format
 msgid "You've been invited to a chat!"
-msgstr "¡Lo han invitado a un chat!"
+msgstr "¡Le han invitado a un chat!"
 
 #. module: mail
 #. openerp-web
 #: code:addons/mail/static/src/components/welcome_view/welcome_view.xml:0
 #, python-format
 msgid "You've been invited to a meeting!"
-msgstr "¡Lo han invitado a una reunión!"
+msgstr "¡Le han invitado a una reunión!"
 
 #. module: mail
 #. openerp-web
@@ -8081,7 +8114,7 @@ msgstr "Su navegador no permite la activación por voz"
 #: code:addons/mail/static/src/models/thread/thread.js:0
 #, python-format
 msgid "Your browser does not support webRTC."
-msgstr "Su navegador no permite webRTC"
+msgstr "Su navegador no es compatible con webRTC."
 
 #. module: mail
 #. openerp-web

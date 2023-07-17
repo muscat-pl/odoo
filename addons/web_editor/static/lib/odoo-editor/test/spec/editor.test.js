@@ -3630,6 +3630,34 @@ X[]
                     renderingClasses: ['x']
                 });
             });
+            it('should skip the mutations if no changes in state', async () => {
+                await testEditor(BasicEditor, {
+                    contentBefore: `<p class="x">a</p>`,
+                    stepFunction: async editor => {
+                        const p = editor.editable.querySelector('p');
+                        editor.historyPauseSteps();
+                        p.className = ""; // remove class 'x'
+                        p.className = "x"; // apply class 'x' again
+                        editor.historyUnpauseSteps();
+                        editor.historyRevertCurrentStep(); // back to the initial state
+                    },
+                    contentAfter: `<p class="x">a</p>`,
+                }, {
+                    renderingClasses: ['y']
+                });
+            });
+        });
+    });
+
+    describe('tables', () => {
+        describe('tab', () => {
+            it('should add a new row on press tab at the end of a table', async () => {
+                await testEditor(BasicEditor, {
+                    contentBefore: '<table><tbody><tr><td>ab</td><td>cd</td><td>ef[]</td></tr></tbody></table>',
+                    stepFunction: async editor => triggerEvent(editor.editable, 'keydown', { key: 'Tab'}),
+                    contentAfter: '<table><tbody><tr><td>ab</td><td>cd</td><td>ef</td></tr><tr><td>[]<br></td><td><br></td><td><br></td></tr></tbody></table>',
+                });
+            });
         });
     });
 

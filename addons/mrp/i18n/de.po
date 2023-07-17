@@ -91,7 +91,7 @@ msgstr "%i Arbeitsaufträge"
 #: code:addons/mrp/models/mrp_unbuild.py:0
 #, python-format
 msgid "%s %s unbuilt in"
-msgstr ""
+msgstr "%s %s demontiert in"
 
 #. module: mrp
 #: code:addons/mrp/models/mrp_bom.py:0
@@ -1510,6 +1510,10 @@ msgid ""
 "  * Allowed with warning: allowed for all manufacturing users with summary of consumption differences when closing the manufacturing order.\n"
 "  * Blocked: only a manager can close a manufacturing order when the BoM consumption is not respected."
 msgstr ""
+"Legt fest, ob Sie mehr oder weniger Komponenten als die in der Stückliste definierte Menge verbrauchen können:\n"
+"  * Erlaubt: erlaubt für alle Benutzer in der Fertigung.\n"
+"  * Erlaubt mit Warnung: erlaubt für alle Benutzer in der Fertigung mit Zusammenfassung der Verbrauchsdifferenzen beim Abschluss des Fertigungsauftrags.\n"
+"  * Blockiert: nur ein Manager kann einen Fertigungsauftrag schließen, wenn der Stücklistenverbrauch nicht eingehalten wird."
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_routing_workcenter__worksheet_type
@@ -2836,7 +2840,7 @@ msgstr "Sonstiges"
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_immediate_production__mo_ids
 msgid "Mo"
-msgstr ""
+msgstr "Mo"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__move_byproduct_ids
@@ -3085,6 +3089,12 @@ msgid ""
 "multiplied by two. However, note that both time before and after production "
 "will only be counted once. "
 msgstr ""
+"Anzahl der Stücke (in Produkt-Maßeinheit), die an diesem Arbeitsplatz "
+"parallel (gleichzeitig) gefertigt werden können. Beispiel: Die Kapazität "
+"beträgt 5 und Sie müssen 10 Stück produzieren, dann wird die in der "
+"Stückliste angegebene Bearbeitungszeit mit zwei multipliziert. Beachten Sie "
+"jedoch, dass sowohl die Zeit vor als auch nach der Produktion nur einmal "
+"gezählt wird."
 
 #. module: mrp
 #: model:ir.model.fields,help:mrp.field_mrp_bom__product_qty
@@ -3093,6 +3103,9 @@ msgid ""
 "If the BOM contains operations, make sure the work center capacity is "
 "accurate. "
 msgstr ""
+"Dies sollte die kleinste Menge sein, in der dieses Produkt hergestellt "
+"werden kann. Wenn die Stückliste Vorgänge enthält, vergewissern Sie sich, "
+"dass die Kapazität des Arbeitsplatzes angemessen ist."
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_production__mrp_production_source_count
@@ -3419,7 +3432,7 @@ msgstr "Klicken Sie zuerst auf die Schaltfläche „Speichern“"
 #: model:product.product,name:mrp.product_product_wood_ply
 #: model:product.template,name:mrp.product_product_wood_ply_product_template
 msgid "Ply Layer"
-msgstr ""
+msgstr "Falzschicht"
 
 #. module: mrp
 #: model:product.product,name:mrp.product_product_ply_veneer
@@ -5303,7 +5316,7 @@ msgstr "Warnungen"
 #: model:product.product,name:mrp.product_product_wood_wear
 #: model:product.template,name:mrp.product_product_wood_wear_product_template
 msgid "Wear Layer"
-msgstr ""
+msgstr "Nutzschicht"
 
 #. module: mrp
 #: model:ir.model.fields,field_description:mrp.field_mrp_document__website_id

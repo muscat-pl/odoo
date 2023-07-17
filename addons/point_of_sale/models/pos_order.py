@@ -192,8 +192,7 @@ class PosOrder(models.Model):
             order.add_payment(return_payment_vals)
 
     def _prepare_invoice_line(self, order_line):
-        display_name = order_line.product_id.get_product_multiline_description_sale()
-        name = order_line.product_id.default_code + " " + display_name if order_line.product_id.default_code else display_name
+        name = order_line.product_id.get_product_multiline_description_sale()
         return {
             'product_id': order_line.product_id.id,
             'quantity': order_line.qty if self.amount_total >= 0 else -order_line.qty,
@@ -615,6 +614,9 @@ class PosOrder(models.Model):
             if self.config_id.cash_rounding and (not self.config_id.only_round_cash_method or any(p.payment_method_id.is_cash_count for p in self.payment_ids))
             else False
         }
+        if self.refunded_order_ids.account_move:
+            vals['ref'] = _('Reversal of: %s', self.refunded_order_ids.account_move.name)
+            vals['reversed_entry_id'] = self.refunded_order_ids.account_move.id
         if self.note:
             vals.update({'narration': self.note})
         return vals
@@ -1136,7 +1138,7 @@ class PosOrderLine(models.Model):
         for line in self.filtered(lambda l: not l.is_total_cost_computed):
             product = line.product_id
             if line._is_product_storable_fifo_avco() and stock_moves:
-                product_cost = product._compute_average_price(0, line.qty, stock_moves.filtered(lambda ml: ml.product_id == product))
+                product_cost = product._compute_average_price(0, line.qty, self._get_stock_moves_to_consider(stock_moves, product))
             else:
                 product_cost = product.standard_price
             line.total_cost = line.qty * product.cost_currency_id._convert(
@@ -1147,6 +1149,9 @@ class PosOrderLine(models.Model):
                 round=False,
             )
             line.is_total_cost_computed = True
+
+    def _get_stock_moves_to_consider(self, stock_moves, product):
+        return stock_moves.filtered(lambda ml: ml.product_id.id == product.id)
 
     @api.depends('price_subtotal', 'total_cost')
     def _compute_margin(self):

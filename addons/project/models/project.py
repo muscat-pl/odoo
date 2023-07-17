@@ -72,7 +72,7 @@ class ProjectTaskType(models.Model):
     description = fields.Text(translate=True)
     sequence = fields.Integer(default=1)
     project_ids = fields.Many2many('project.project', 'project_task_type_rel', 'type_id', 'project_id', string='Projects',
-        default=_get_default_project_ids)
+        default=lambda self: self._get_default_project_ids())
     legend_blocked = fields.Char(
         'Red Kanban Label', default=lambda s: _('Blocked'), translate=True, required=True,
         help='Override the default value displayed for the blocked state for kanban selection when the task or issue is in that stage.')
@@ -955,7 +955,7 @@ class Task(models.Model):
 
     active = fields.Boolean(default=True)
     name = fields.Char(string='Title', tracking=True, required=True, index=True)
-    description = fields.Html(string='Description')
+    description = fields.Html(string='Description', sanitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Normal'),
         ('1', 'Important'),
@@ -1220,7 +1220,7 @@ class Task(models.Model):
                 stage = self.env['project.task.type'].sudo().search([('user_id', '=', user_id.id)], limit=1)
                 # In the case no stages have been found, we create the default stages for the user
                 if not stage:
-                    stages = self.env['project.task.type'].sudo().with_context(lang=user_id.partner_id.lang, default_project_id=False).create(
+                    stages = self.env['project.task.type'].sudo().with_context(lang=user_id.partner_id.lang, default_project_ids=False).create(
                         self.with_context(lang=user_id.partner_id.lang)._get_default_personal_stage_create_vals(user_id.id)
                     )
                     stage = stages[0]
@@ -1807,8 +1807,10 @@ class Task(models.Model):
                     recurrence = self.env['project.task.recurrence'].create(rec_values)
                     task.recurrence_id = recurrence.id
 
-        if 'recurring_task' in vals and not vals.get('recurring_task'):
+        if not vals.get('recurring_task', True) and self.recurrence_id:
+            tasks_in_recurrence = self.recurrence_id.task_ids
             self.recurrence_id.unlink()
+            tasks_in_recurrence.write({'recurring_task': False})
 
         tasks = self
         recurrence_update = vals.pop('recurrence_update', 'this')

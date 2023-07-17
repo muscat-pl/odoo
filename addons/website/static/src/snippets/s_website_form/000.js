@@ -91,7 +91,6 @@ odoo.define('website.s_website_form', function (require) {
             for (const [name, funcs] of visibilityFunctionsByFieldName.entries()) {
                 this._visibilityFunctionByFieldName.set(name, () => funcs.some(func => func()));
             }
-            this._updateFieldsVisibility();
 
             this._onFieldInputDebounced = _.debounce(this._onFieldInput.bind(this), 400);
             this.$el.on('input.s_website_form', '.s_website_form_field', this._onFieldInputDebounced);
@@ -133,9 +132,14 @@ odoo.define('website.s_website_form', function (require) {
             if (dataForEl || Object.keys(this.preFillValues).length) {
                 const dataForValues = dataForEl ?
                     JSON.parse(dataForEl.dataset.values
-                        .replace('False', '""')
-                        .replace('None', '""')
-                        .replace(/'/g, '"')
+                        // replaces `True` by `true` if they are after `,` or `:` or `[`
+                        .replace(/([,:\[]\s*)True/g, '$1true')
+                        // replaces `False` and `None` by `""` if they are after `,` or `:` or `[`
+                        .replace(/([,:\[]\s*)(False|None)/g, '$1""')
+                        // replaces the `'` by `"` if they are before `,` or `:` or `]` or `}`
+                        .replace(/'(\s*[,:\]}])/g, '"$1')
+                        // replaces the `'` by `"` if they are after `{` or `[` or `,` or `:`
+                        .replace(/([{\[:,]\s*)'/g, '$1"')
                     ) : {};
                 const fieldNames = this.$target.serializeArray().map(el => el.name);
                 // All types of inputs do not have a value property (eg:hidden),
@@ -177,6 +181,7 @@ odoo.define('website.s_website_form', function (require) {
                     }
                 }
             }
+            this._updateFieldsVisibility();
 
             // Check disabled states
             this.inputEls = this.$target[0].querySelectorAll('.s_website_form_field.s_website_form_field_hidden_if .s_website_form_input');
@@ -295,13 +300,21 @@ odoo.define('website.s_website_form', function (require) {
             // force server date format usage for existing fields
             this.$target.find('.s_website_form_field:not(.s_website_form_custom)')
             .find('.s_website_form_date, .s_website_form_datetime').each(function () {
+                const inputEl = this.querySelector('input');
+
+                // Datetimepicker('viewDate') will return `new Date()` if the
+                // input is empty but we want to keep the empty value
+                if (!inputEl.value) {
+                    return;
+                }
+
                 var date = $(this).datetimepicker('viewDate').clone().locale('en');
                 var format = 'YYYY-MM-DD';
                 if ($(this).hasClass('s_website_form_datetime')) {
                     date = date.utc();
                     format = 'YYYY-MM-DD HH:mm:ss';
                 }
-                form_values[$(this).find('input').attr('name')] = date.format(format);
+                form_values[inputEl.getAttribute('name')] = date.format(format);
             });
 
             if (this._recaptchaLoaded) {
@@ -574,6 +587,13 @@ odoo.define('website.s_website_form', function (require) {
          * @returns {boolean}
          */
         _compareTo(comparator, value = '', comparable, between) {
+            // Value can be null when the compared field is supposed to be
+            // visible, but is not yet retrievable from the FormData() because
+            // the field was conditionally hidden. It can be considered empty.
+            if (value === null) {
+                value = '';
+            }
+
             switch (comparator) {
                 case 'contains':
                     return value.includes(comparable);
@@ -660,8 +680,20 @@ odoo.define('website.s_website_form', function (require) {
          * Calculates the visibility for each field with conditional visibility
          */
         _updateFieldsVisibility() {
+            let anyFieldVisibilityUpdated = false;
             for (const [fieldEl, visibilityFunction] of this._visibilityFunctionByFieldEl.entries()) {
-                this._updateFieldVisibility(fieldEl, visibilityFunction());
+                const wasVisible = !fieldEl.closest(".s_website_form_field")
+                    .classList.contains("d-none");
+                const isVisible = !!visibilityFunction();
+                this._updateFieldVisibility(fieldEl, isVisible);
+                anyFieldVisibilityUpdated |= wasVisible !== isVisible;
+            }
+            // Recursive check needed in case of a field (C) that
+            // conditionally displays a prefilled field (B), which in turn
+            // triggers a conditional visibility on another field (A),
+            // registered before B.
+            if (anyFieldVisibilityUpdated) {
+                this._updateFieldsVisibility();
             }
         },
         /**

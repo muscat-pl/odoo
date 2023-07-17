@@ -50,6 +50,12 @@ msgstr "\" Alarm mit einem"
 #. module: website
 #: code:addons/website/models/website_rewrite.py:0
 #, python-format
+msgid "\"URL from\" can not be empty."
+msgstr "„URL von“ darf nicht leer sein."
+
+#. module: website
+#: code:addons/website/models/website_rewrite.py:0
+#, python-format
 msgid "\"URL to\" can not be empty."
 msgstr "\"URL to\" darf nicht leer sein."
 
@@ -5752,70 +5758,70 @@ msgstr "Eingaben"
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a badge snippet."
-msgstr ""
+msgstr "Ein Abzeichen-Snippet einfügen"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a blockquote snippet."
-msgstr ""
+msgstr "Ein Blockzitat-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a card snippet."
-msgstr ""
+msgstr "Ein Karten-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a chart snippet."
-msgstr ""
+msgstr "Ein Diagramm-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a progress bar snippet."
-msgstr ""
+msgstr "Ein Fortschrittsleisten-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a rating snippet."
-msgstr ""
+msgstr "Ein Bewertungs-Snippet einfügen"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a share snippet."
-msgstr ""
+msgstr "Ein Teilen-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert a text Highlight snippet."
-msgstr ""
+msgstr "Ein Texthervorhebungs-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert an alert snippet."
-msgstr ""
+msgstr "Ein Warnungs-Snippet einfügen."
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/edit.js:0
 #, python-format
 msgid "Insert an horizontal separator sippet."
-msgstr ""
+msgstr "Ein Snippet für einer horizentalen Trennlinie einfügen."
 
 #. module: website
 #: model_terms:ir.ui.view,arch_db:website.s_table_of_content
@@ -9895,6 +9901,18 @@ msgstr ""
 
 #. module: website
 #. openerp-web
+#: code:addons/website/static/src/js/editor/snippets.options.js:0
+#, python-format
+msgid ""
+"This font already exists, you can only add it as a local font to replace the"
+" server version."
+msgstr ""
+"Diese Schriftart existiert bereits, Sie können sie nur als lokale Schriftart"
+" hinzufügen, um die Serverversion zu ersetzen."
+
+#. module: website
+#. openerp-web
+#: code:addons/website/static/src/js/editor/snippets.options.js:0
 #: code:addons/website/static/src/xml/website.editor.xml:0
 #, python-format
 msgid "This font is hosted and served to your visitors by Google servers"
@@ -10212,7 +10230,7 @@ msgstr "Attribut übersetzen"
 #: code:addons/website/static/src/js/menu/translate.js:0
 #, python-format
 msgid "Translate Selection Option"
-msgstr ""
+msgstr "Option zur Übersetzungsauswahl"
 
 #. module: website
 #. openerp-web

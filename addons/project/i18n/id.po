@@ -500,7 +500,7 @@ msgstr ""
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
 msgid "<span class=\"o_stat_text\">Gross Margin</span>"
-msgstr ""
+msgstr "<span class=\"o_stat_text\">Margin Kotor</span>"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
@@ -734,7 +734,7 @@ msgstr ""
 #. module: project
 #: model:res.groups,name:project.group_project_manager
 msgid "Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #. module: project
 #. openerp-web
@@ -1332,7 +1332,7 @@ msgstr ""
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__create_date
 msgid "Created On"
-msgstr ""
+msgstr "Dibuat Pada"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_collaborator__create_uid
@@ -2056,7 +2056,7 @@ msgstr "Label Kanban Abu-Abu"
 #: code:addons/project/models/project.py:0
 #, python-format
 msgid "Gross Margin"
-msgstr ""
+msgstr "Margin Kotor"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_collaborator_view_search
@@ -2745,7 +2745,7 @@ msgstr ""
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__milestone_count
 msgid "Milestone Count"
-msgstr ""
+msgstr "Jumlah Milestone"
 
 #. module: project
 #. openerp-web
@@ -2753,7 +2753,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:project.project_milestone_all
 #, python-format
 msgid "Milestones"
-msgstr ""
+msgstr "Milestone"
 
 #. module: project
 #. openerp-web
@@ -3395,7 +3395,7 @@ msgstr "Pribadi"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.res_config_settings_view_form
 msgid "Profitability"
-msgstr ""
+msgstr "Profitabilitas"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_update__progress
@@ -3481,7 +3481,7 @@ msgstr "Manajer Proyek"
 #. module: project
 #: model:ir.model,name:project.model_project_milestone
 msgid "Project Milestone"
-msgstr ""
+msgstr "Milestone Project"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.edit_project
@@ -3706,7 +3706,7 @@ msgstr ""
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__rating_ids
 msgid "Ratings"
-msgstr ""
+msgstr "Rating"
 
 #. module: project
 #: code:addons/project/models/project.py:0
@@ -3952,7 +3952,7 @@ msgstr "Penelitian"
 #. module: project
 #: model:project.project,name:project.project_project_2
 msgid "Research & Development"
-msgstr ""
+msgstr "Penelitian & Pengembangan"
 
 #. module: project
 #. openerp-web
@@ -4034,7 +4034,7 @@ msgstr ""
 #: code:addons/project/controllers/portal.py:0
 #, python-format
 msgid "Search in All"
-msgstr ""
+msgstr "Cari di Semua"
 
 #. module: project
 #: code:addons/project/controllers/portal.py:0
@@ -4456,7 +4456,7 @@ msgstr "Tugas siap"
 #. module: project
 #: model:ir.model,name:project.model_project_task_recurrence
 msgid "Task Recurrence"
-msgstr ""
+msgstr "Pengulangan Task"
 
 #. module: project
 #: model:ir.model,name:project.model_project_task_type

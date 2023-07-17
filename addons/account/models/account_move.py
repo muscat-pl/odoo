@@ -620,6 +620,15 @@ class AccountMove(models.Model):
 
             move._recompute_dynamic_lines()
 
+    @api.onchange('invoice_cash_rounding_id')
+    def _onchange_invoice_cash_rounding_id(self):
+        for move in self:
+            if move.invoice_cash_rounding_id.strategy == 'add_invoice_line' and not move.invoice_cash_rounding_id.profit_account_id:
+                return {'warning':{
+                    'title': _("Warning for Cash Rounding Method: %s", move.invoice_cash_rounding_id.name),
+                    'message': _("You must specify the Profit Account (company dependent)")
+                }}
+
     @api.model
     def _get_tax_grouping_key_from_tax_line(self, tax_line):
         ''' Create the dictionary based on a tax line that will be used as key to group taxes together.
@@ -811,12 +820,15 @@ class AccountMove(models.Model):
                 self.date or fields.Date.context_today(self),
             )
             amount_currency = currency.round(taxes_map_entry['amount'])
+            sign = -1 if self.is_inbound() else 1
             to_write_on_line = {
                 'amount_currency': amount_currency,
                 'currency_id': taxes_map_entry['grouping_dict']['currency_id'],
                 'debit': balance > 0.0 and balance or 0.0,
                 'credit': balance < 0.0 and -balance or 0.0,
                 'tax_base_amount': tax_base_amount,
+                'price_total': sign * amount_currency,
+                'price_subtotal': sign * amount_currency,
             }
 
             if taxes_map_entry['tax_line']:
@@ -1233,11 +1245,16 @@ class AccountMove(models.Model):
                     if not move.posted_before:
                         # The move was never posted, so the name can potentially be changed.
                         move._constrains_date_sequence()
-                    # Either the move was posted before, or the name already matches the date.
+                    # Either the move was posted before, or the name already matches the date (or no name or date).
                     # We can skip recalculating the name when either
-                    # - the move was posted before and already has a name, or
-                    # - the move has no name, but is in a period with other moves (so name should be `/`)
-                    if move_has_name and move.posted_before or not move_has_name and move._get_last_sequence(lock=False):
+                    # - the move already has a name, or
+                    # - the move has no name, but is in a period with other moves (so name should be `/`), or
+                    # - the move has (temporarily) no date set
+                    if (
+                        move_has_name and move.posted_before
+                        or not move_has_name and move._get_last_sequence(lock=False)
+                        or not move.date
+                    ):
                         continue
                 except ValidationError:
                     # The move was never posted and the current name doesn't match the date. We should calculate the

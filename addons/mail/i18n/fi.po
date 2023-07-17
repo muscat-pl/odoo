@@ -30,11 +30,11 @@
 # Antti Oksman <antti.oksman@web-veistamo.fi>, 2021
 # Miika Nissi <miika.nissi@tawasta.fi>, 2022
 # Martin Trigaux, 2022
-# Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>, 2022
 # Joakim Weckman, 2022
 # Konsta Aavaranta, 2023
-# Ossi Mantylahti <ossi.mantylahti@obs-solutions.fi>, 2023
 # Tuomo Aura <tuomo.aura@web-veistamo.fi>, 2023
+# Ossi Mantylahti <ossi.mantylahti@obs-solutions.fi>, 2023
+# Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
@@ -42,7 +42,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-24 08:19+0000\n"
 "PO-Revision-Date: 2021-09-14 12:23+0000\n"
-"Last-Translator: Tuomo Aura <tuomo.aura@web-veistamo.fi>, 2023\n"
+"Last-Translator: Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>, 2023\n"
 "Language-Team: Finnish (https://app.transifex.com/odoo/teams/41243/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -945,6 +945,12 @@ msgstr "Aliakset"
 #, python-format
 msgid "All"
 msgstr "Kaikki"
+
+#. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid "An access token must be provided for each attachment."
+msgstr "Jokaisella liitteellä on oltava pääsytunniste."
 
 #. module: mail
 #: code:addons/mail/models/res_partner.py:0
@@ -6399,7 +6405,7 @@ msgstr "Jaa näyttö"
 #: code:addons/mail/static/src/components/chat_window_header/chat_window_header.js:0
 #, python-format
 msgid "Shift left"
-msgstr ""
+msgstr "Siirry vasemmalle"
 
 #. module: mail
 #. openerp-web
@@ -6407,7 +6413,7 @@ msgstr ""
 #: code:addons/mail/static/src/components/chat_window_header/chat_window_header.js:0
 #, python-format
 msgid "Shift right"
-msgstr ""
+msgstr "Vaihda oikealle"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_mail__description
@@ -6865,6 +6871,19 @@ msgid ""
 msgstr ""
 
 #. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid ""
+"The attachment %s does not exist or you do not have the rights to access it."
+msgstr "Liitettä %s ei ole olemassa, tai sinulla ei ole oikeuksia nähdä sitä."
+
+#. module: mail
+#: code:addons/mail/models/ir_attachment.py:0
+#, python-format
+msgid "The attachment %s does not exist."
+msgstr ""
+
+#. module: mail
 #: model:ir.model.constraint,message:mail.constraint_mail_channel_uuid_unique
 msgid "The channel UUID must be unique"
 msgstr "Kanavan UUID:n täytyy olla ainutlaatuinen"
@@ -6994,7 +7013,7 @@ msgstr "Tilausasetusten käyttöönotto onnistui."
 #: model:ir.model.fields,help:mail.field_mail_template__model_id
 #: model:ir.model.fields,help:mail.field_mail_template_preview__model_id
 msgid "The type of document this template can be used with"
-msgstr ""
+msgstr "Asiakirjatyyppi, jonka kanssa tätä mallia voidaan käyttää"
 
 #. module: mail
 #. openerp-web
@@ -7618,6 +7637,14 @@ msgstr ""
 "Sähköpostien lähettäminen/vastaanottaminen Community- ja Enterprise-"
 "versioissa edellyttää oman sähköpostipalvelimen käyttöä. Online-käyttäjät "
 "hyötyvät jo valmiista sähköpostipalvelimesta (@mycompany.odoo.com)."
+
+#. module: mail
+#: code:addons/mail/models/mail_alias.py:0
+#, python-format
+msgid ""
+"Value for `mail.catchall.domain.allowed` cannot be validated.\n"
+"It should be a comma separated list of domains e.g. example.com,example.org."
+msgstr ""
 
 #. module: mail
 #. openerp-web

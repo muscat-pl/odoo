@@ -17,6 +17,7 @@ const {
     backgroundImageCssToParts,
     backgroundImagePartsToCss,
     DEFAULT_PALETTE,
+    isBackgroundImageAttribute,
 } = weUtils;
 var weWidgets = require('wysiwyg.widgets');
 const {
@@ -168,6 +169,9 @@ function _buildCollapseElement(title, options) {
 
     const togglerEl = document.createElement('we-toggler');
     togglerEl.classList.add('o_we_collapse_toggler');
+    if (_t.database.parameters.direction === 'rtl') {
+        togglerEl.classList.add('o_we_collapse_toggler_rtl');
+    }
     groupEl.appendChild(togglerEl);
 
     const containerEl = document.createElement('div');
@@ -2642,7 +2646,7 @@ const Many2oneUserValueWidget = SelectUserValueWidget.extend({
             method: 'name_search',
             kwargs: {
                 name: needle,
-                args: this.options.domain,
+                args: await this._getSearchDomain(),
                 operator: "ilike",
                 limit: this.options.limit + 1,
             },
@@ -2713,6 +2717,14 @@ const Many2oneUserValueWidget = SelectUserValueWidget.extend({
         this.waitingForSearch = false;
         this.afterSearch.forEach(cb => cb());
         this.afterSearch = [];
+    },
+    /**
+     * Returns the domain to use for the search.
+     *
+     * @private
+     */
+    async _getSearchDomain() {
+        return this.options.domain;
     },
     /**
      * Returns the display name for a given record.
@@ -3421,7 +3433,6 @@ const SnippetOptionWidget = Widget.extend({
      *
      * @param {string} name - an identifier for a type of update
      * @param {*} data
-     * @returns {Promise}
      */
     notify: function (name, data) {
         if (name === 'target') {
@@ -3694,6 +3705,7 @@ const SnippetOptionWidget = Widget.extend({
                 }
 
                 const cssProps = weUtils.CSS_SHORTHANDS[params.cssProperty] || [params.cssProperty];
+                const borderWidthCssProps = weUtils.CSS_SHORTHANDS['border-width'];
                 const cssValues = cssProps.map(cssProp => {
                     let value = styles[cssProp].trim();
                     if (cssProp === 'box-shadow') {
@@ -3702,6 +3714,11 @@ const SnippetOptionWidget = Widget.extend({
                         const color = values.find(s => !s.match(/^\d/));
                         values = values.join(' ').replace(color, '').trim();
                         value = `${color} ${values}${inset ? ' inset' : ''}`;
+                    }
+                    if (borderWidthCssProps.includes(cssProp) && value.endsWith('px')) {
+                        // Rounding value up avoids zoom-in issues.
+                        // Zoom-out issues are not an expected use case.
+                        value = `${Math.ceil(parseFloat(value))}px`;
                     }
                     return value;
                 });
@@ -5664,6 +5681,9 @@ registry.ImageTools = ImageHandlerOption.extend({
      * @override
      */
     _relocateWeightEl() {
+        if (!this.$overlay.data('$optionsSection')) {
+            return;
+        }
         const leftPanelEl = this.$overlay.data('$optionsSection')[0];
         const titleTextEl = leftPanelEl.querySelector('we-title > span');
         const weightEl = titleTextEl.querySelector('.o_we_image_weight');
@@ -5879,22 +5899,6 @@ registry.BackgroundOptimize = ImageHandlerOption.extend({
         this.$target.off('.BackgroundOptimize');
         return this._super(...arguments);
     },
-    /**
-     * Marks the target for creation of an attachment and copies data attributes
-     * to the target so that they can be restored on this.img in later editions.
-     *
-     * @override
-     */
-    async cleanForSave() {
-        const img = this._getImg();
-        if (img.matches('.o_modified_image_to_save')) {
-            this.$target.addClass('o_modified_image_to_save');
-            Object.entries(img.dataset).forEach(([key, value]) => {
-                this.$target[0].dataset[key] = value;
-            });
-            this.$target[0].dataset.bgSrc = img.getAttribute('src');
-        }
-    },
 
     //--------------------------------------------------------------------------
     // Private
@@ -5919,15 +5923,23 @@ registry.BackgroundOptimize = ImageHandlerOption.extend({
      */
     async _loadImageInfo() {
         this.img = new Image();
-        Object.entries(this.$target[0].dataset).filter(([key]) =>
-            // Avoid copying dynamic editor attributes
-            !['oeId','oeModel', 'oeField', 'oeXpath', 'noteId'].includes(key)
-        ).forEach(([key, value]) => {
-            this.img.dataset[key] = value;
-        });
-        const src = getBgImageURL(this.$target[0]);
-        // Don't set the src if not relative (ie, not local image: cannot be modified)
-        this.img.src = src.startsWith('/') ? src : '';
+        // In the case of a parallax, the background of the snippet is actually
+        // set on a child <span> and should be focused here. This is necessary
+        // because, at this point, the $target has not yet been updated in the
+        // notify() method ("option_update" event), although the event is
+        // properly fired from the parallax.
+        const targetEl = this.$target[0].classList.contains("oe_img_bg")
+            ? this.$target[0] : this.$target[0].querySelector(":scope > .s_parallax_bg.oe_img_bg");
+        if (targetEl) {
+            Object.entries(targetEl.dataset).filter(([key]) =>
+                isBackgroundImageAttribute(key)).forEach(([key, value]) => {
+                this.img.dataset[key] = value;
+            });
+            const src = getBgImageURL(targetEl);
+            // Don't set the src if not relative (ie, not local image: cannot be
+            // modified)
+            this.img.src = src.startsWith("/") ? src : "";
+        }
         return await this._super(...arguments);
     },
     /**
@@ -5954,6 +5966,21 @@ registry.BackgroundOptimize = ImageHandlerOption.extend({
         parts.url = `url('${img.getAttribute('src')}')`;
         const combined = backgroundImagePartsToCss(parts);
         this.$target.css('background-image', combined);
+        // Apply modification on the DOM HTML element that is currently being
+        // modified.
+        this.$target[0].classList.add("o_modified_image_to_save");
+        // First delete the data attributes relative to the image background
+        // from the target as a data attribute could have been be removed (ex:
+        // glFilter).
+        for (const attribute in this.$target[0].dataset) {
+            if (isBackgroundImageAttribute(attribute)) {
+                delete this.$target[0].dataset[attribute];
+            }
+        }
+        Object.entries(img.dataset).forEach(([key, value]) => {
+            this.$target[0].dataset[key] = value;
+        });
+        this.$target[0].dataset.bgSrc = img.getAttribute("src");
     },
 
     //--------------------------------------------------------------------------
@@ -5966,6 +5993,7 @@ registry.BackgroundOptimize = ImageHandlerOption.extend({
      * @private
      */
     async _onBackgroundChanged(ev, previewMode) {
+        ev.stopPropagation();
         if (!previewMode) {
             this.trigger_up('snippet_edition_request', {exec: async () => {
                 await this._autoOptimizeImage();
@@ -6165,12 +6193,29 @@ registry.BackgroundImage = SnippetOptionWidget.extend({
      */
     setTarget: function () {
         // When we change the target of this option we need to transfer the
-        // background-image from the old target to the new one.
+        // background-image and the dataset information relative to this image
+        // from the old target to the new one.
         const oldBgURL = getBgImageURL(this.$target);
+        const isModifiedImage = this.$target[0].classList.contains("o_modified_image_to_save");
+        const filteredOldDataset = Object.entries(this.$target[0].dataset).filter(([key]) => {
+            return isBackgroundImageAttribute(key);
+        });
+        // Delete the dataset information relative to the background-image of
+        // the old target.
+        filteredOldDataset.forEach(([key]) => {
+            delete this.$target[0].dataset[key];
+        });
+        // It is important to delete ".o_modified_image_to_save" from the old
+        // target as its image source will be deleted.
+        this.$target[0].classList.remove("o_modified_image_to_save");
         this._setBackground('');
         this._super(...arguments);
         if (oldBgURL) {
             this._setBackground(oldBgURL);
+            filteredOldDataset.forEach(([key, value]) => {
+                this.$target[0].dataset[key] = value;
+            });
+            this.$target[0].classList.toggle("o_modified_image_to_save", isModifiedImage);
         }
 
         // TODO should be automatic for all options as equal to the start method

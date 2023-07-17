@@ -7,6 +7,8 @@
 # Fernando Colus <fcolus1@gmail.com>, 2021
 # Éder Brito <britoederr@gmail.com>, 2022
 # Martin Trigaux, 2023
+# Layna Nascimento, 2023
+# adrianojprado <adrianojprado@gmail.com>, 2023
 # Kevilyn Rosa, 2023
 # 
 msgid ""
@@ -232,7 +234,7 @@ msgstr ""
 #: code:addons/web_editor/static/src/xml/editor.xml:0
 #, python-format
 msgid "Add Row"
-msgstr ""
+msgstr "Adicionar linha"
 
 #. module: web_editor
 #. openerp-web
@@ -1484,7 +1486,7 @@ msgstr "Elementos invisíveis"
 #: code:addons/web_editor/static/src/js/editor/snippets.options.js:0
 #, python-format
 msgid "Item"
-msgstr ""
+msgstr "Item"
 
 #. module: web_editor
 #. openerp-web
@@ -1657,7 +1659,7 @@ msgstr "Nome"
 #: code:addons/web_editor/static/src/js/wysiwyg/wysiwyg.js:0
 #, python-format
 msgid "Navigation"
-msgstr ""
+msgstr "Navegação"
 
 #. module: web_editor
 #. openerp-web
@@ -2676,7 +2678,7 @@ msgstr ""
 #: code:addons/web_editor/static/src/odoo-editor/src/OdooEditor.js:0
 #, python-format
 msgid "To-do"
-msgstr ""
+msgstr "Lista de Tarefas"
 
 #. module: web_editor
 #: model_terms:ir.ui.view,arch_db:web_editor.snippet_options_image_optimization_widgets
@@ -2805,7 +2807,7 @@ msgstr "Tipo"
 #: code:addons/web_editor/static/src/odoo-editor/src/OdooEditor.js:0
 #, python-format
 msgid "Type \"/\" for commands"
-msgstr ""
+msgstr "Digite \"/\" para comandos"
 
 #. module: web_editor
 #. openerp-web

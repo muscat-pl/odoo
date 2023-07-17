@@ -4,10 +4,10 @@
 # 
 # Translators:
 # Cécile Collart <cco@odoo.com>, 2021
-# Martin Trigaux, 2021
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2021
+# Martin Trigaux, 2021
 # Braulio D. López Vázquez <bdl@odoo.com>, 2022
-# Lucia Pacheco <lpo@odoo.com>, 2022
+# Lucia Pacheco, 2022
 # Fernanda Alvarez, 2023
 # 
 msgid ""
@@ -110,7 +110,7 @@ msgstr "(+ 1 tarea)"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.milestone_deadline
 msgid "(due"
-msgstr "(debido"
+msgstr "(hasta"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_update_default_description
@@ -566,7 +566,7 @@ msgid ""
 "                            </span>"
 msgstr ""
 "<span class=\"o_stat_text\">\n"
-"                                Diagrama de quemado\n"
+"                                Gráfico de trabajo pendiente\n"
 "                            </span>"
 
 #. module: project
@@ -675,7 +675,7 @@ msgid ""
 "A Python dictionary that will be evaluated to provide default values when "
 "creating new records for this alias."
 msgstr ""
-"Se evaluará un diccionario de Python con el fin de proporcionar valores "
+"Un diccionario de Python que se evaluará con el fin de proporcionar valores "
 "predefinidos cuando se creen nuevos registros para este seudónimo."
 
 #. module: project
@@ -775,18 +775,18 @@ msgstr "Tipos de actividad"
 #: code:addons/project/static/src/xml/project_templates.xml:0
 #, python-format
 msgid "Add Milestone"
-msgstr "Añadir objetivo"
+msgstr "Agregar objetivo"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.personal_task_type_edit
 #: model_terms:ir.ui.view,arch_db:project.task_type_edit
 msgid "Add a description..."
-msgstr "Añadir descripción..."
+msgstr "Agregar una descripción..."
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_share_wizard_view_form
 msgid "Add a note"
-msgstr "Añadir nota"
+msgstr "Agregar nota"
 
 #. module: project
 #. openerp-web
@@ -1196,7 +1196,7 @@ msgstr "Lluvia de ideas"
 #: model_terms:ir.ui.view,arch_db:project.view_project_kanban
 #, python-format
 msgid "Burndown Chart"
-msgstr "Diagrama de quemado"
+msgstr "Gráfico de trabajo pendiente"
 
 #. module: project
 #: model:project.task,legend_done:project.project_task_10
@@ -1672,7 +1672,7 @@ msgstr "Fecha límite"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_message_user_assigned
 msgid "Dear"
-msgstr "Estimada/o"
+msgstr "Apreciable"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_task__repeat_month__december
@@ -1823,7 +1823,7 @@ msgstr "Marketing digital"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task_type__disabled_rating_warning
 msgid "Disabled Rating Warning"
-msgstr "Advertencia de valoración desactivada"
+msgstr "Advertencia de calificación desactivada"
 
 #. module: project
 #. openerp-web
@@ -2028,7 +2028,7 @@ msgstr "Filtros avanzados"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
 msgid "Extra Info"
-msgstr "Información extra"
+msgstr "Información adicional"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_task__repeat_month__february
@@ -2292,8 +2292,8 @@ msgid ""
 "ID of the parent record holding the alias (example: project holding the task"
 " creation alias)"
 msgstr ""
-"ID del registro padre que contiene el seudónimo (por ejemplo: el proyecto "
-"que contiene el seudónimo de creación de la tarea)"
+"ID del registro principal que tiene el seudónimo (ejemplo: el proyecto que "
+"contiene el seudónimo para la creación de tareas)"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__activity_exception_icon
@@ -2341,8 +2341,7 @@ msgstr ""
 #: model:ir.model.fields,help:project.field_project_update__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
-"Si se encuentra seleccionado, algunos mensajes presentan un error de "
-"entrega."
+"Si se encuentra seleccionado, algunos mensajes presentan un error de envío."
 
 #. module: project
 #: model:ir.model.fields,help:project.field_project_task_type__rating_template_id
@@ -2379,8 +2378,8 @@ msgid ""
 "If set, this content will automatically be sent out to unauthorized users "
 "instead of the default message."
 msgstr ""
-"Si esta opción está activada, se enviará automáticamente este contenido a "
-"los usuarios no autorizados en lugar del mensaje predeterminado."
+"Si se establece, este contenido se enviará de forma automática a usuarios no"
+" autorizados en lugar del mensaje predeterminado."
 
 #. module: project
 #: model:ir.model.fields,help:project.field_project_project__active
@@ -2744,14 +2743,14 @@ msgstr "Última valoración: Satisfecho"
 #: code:addons/project/static/src/js/tours/project.js:0
 #, python-format
 msgid "Let's create your first <b>project</b>."
-msgstr "Vamos a crear su primer <b>proyecto</b>."
+msgstr "Creemos su primer <b>proyecto</b>."
 
 #. module: project
 #. openerp-web
 #: code:addons/project/static/src/js/tours/project.js:0
 #, python-format
 msgid "Let's create your first <b>task</b>."
-msgstr "Vamos a crear su primer <b>tarea</b>."
+msgstr "Creemos su primer <b>tarea</b>."
 
 #. module: project
 #. openerp-web
@@ -3142,7 +3141,7 @@ msgstr "No se encontraron objetivos. ¡Creemos uno!"
 #: model_terms:ir.actions.act_window,help:project.open_view_project_all_config
 #: model_terms:ir.actions.act_window,help:project.open_view_project_all_group_stage
 msgid "No projects found. Let's create one!"
-msgstr "No se encontraron proyectos. ¡Vamos a crear uno!"
+msgstr "No se encontraron proyectos. ¡Creemos uno!"
 
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.open_task_type_form
@@ -3153,7 +3152,7 @@ msgstr "No hay etapas ¡hay que crear una!"
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.project_tags_action
 msgid "No tags found. Let's create one!"
-msgstr "No se encontraron etiquetas. ¡Vamos a crear una!"
+msgstr "No se encontraron etiquetas. ¡Creemos una!"
 
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.act_project_project_2_project_task_all
@@ -3161,7 +3160,7 @@ msgstr "No se encontraron etiquetas. ¡Vamos a crear una!"
 #: model_terms:ir.actions.act_window,help:project.action_view_task
 #: model_terms:ir.actions.act_window,help:project.project_sharing_project_task_action
 msgid "No tasks found. Let's create one!"
-msgstr "No se encontraron tareas. ¡Vamos a crear una!"
+msgstr "No se encontraron tareas. ¡Creemos una!"
 
 #. module: project
 #: model_terms:ir.actions.act_window,help:project.project_update_all_action
@@ -3342,8 +3341,8 @@ msgid ""
 "creation of new records completely."
 msgstr ""
 "ID opcional de un hilo (registro) al que se adjuntarán todos los mensajes "
-"entrantes, incluso si no son respuestas del mismo. Si se configura se "
-"deshabilitará completamente la creación de nuevos registros."
+"entrantes, incluso si no fueron respuestas del mismo. Si se establece, se "
+"deshabilitará por completo la creación de nuevos registros."
 
 #. module: project
 #: code:addons/project/controllers/portal.py:0
@@ -3873,7 +3872,7 @@ msgstr "Valor de valoración (/ 5)"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__rating_count
 msgid "Rating count"
-msgstr "Número de valoración "
+msgstr "Número de calificaciones"
 
 #. module: project
 #: model:ir.model.fields.selection,name:project.selection__project_project__rating_status__stage
@@ -3971,7 +3970,7 @@ msgstr "Destinatarios"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_project__alias_force_thread_id
 msgid "Record Thread ID"
-msgstr "ID del hilo del registro hijo"
+msgstr "ID del hilo de registro"
 
 #. module: project
 #. openerp-web
@@ -4078,22 +4077,22 @@ msgstr "Repetir el año"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__repeat_show_day
 msgid "Repeat Show Day"
-msgstr "Repeat Show Day"
+msgstr "Repetir mostrar día"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__repeat_show_dow
 msgid "Repeat Show Dow"
-msgstr "Repeat Show Dow"
+msgstr "Repetir mostrar día de la semana"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__repeat_show_month
 msgid "Repeat Show Month"
-msgstr "Repeat Show Month"
+msgstr "Repetir mostrar mes"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__repeat_show_week
 msgid "Repeat Show Week"
-msgstr "Repeat Show Week"
+msgstr "Repetir mostrar semana"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task__repeat_unit
@@ -4357,7 +4356,7 @@ msgstr "Desarrollo de Software"
 #: code:addons/project/models/project.py:0
 #, python-format
 msgid "Sorry. You can't set a task as its parent task."
-msgstr "Lo siento. No se puede establecer una tarea como su tarea padre."
+msgstr "Lo sentimos, no puede establecer una tarea como su tarea principal."
 
 #. module: project
 #. openerp-web
@@ -4377,7 +4376,7 @@ msgstr "Divida sus tareas para organizar su trabajo en subobjetivos"
 #: code:addons/project/static/src/js/project_task_kanban_examples.js:0
 #, python-format
 msgid "Sprint Backlog"
-msgstr "Sprint Backlog"
+msgstr "Lista de tareas pendientes del sprint"
 
 #. module: project
 #. openerp-web
@@ -4389,7 +4388,7 @@ msgstr "Sprint completo"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.project_update_default_description
 msgid "Sprint Summary"
-msgstr "Resumen de Sprint"
+msgstr "Resumen del sprint"
 
 #. module: project
 #. openerp-web
@@ -4429,7 +4428,7 @@ msgstr "Descripción de la etapa e información sobre las herramientas"
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_task_type__user_id
 msgid "Stage Owner"
-msgstr "Dueño de la etapa"
+msgstr "Propietario de la etapa"
 
 #. module: project
 #: model:mail.message.subtype,description:project.mt_task_stage
@@ -5363,12 +5362,12 @@ msgstr "Tiempo de trabajo"
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
 msgid "Working Time to Assign"
-msgstr "Tiempo de trabajo que asignar"
+msgstr "Horas laborables a asignar"
 
 #. module: project
 #: model_terms:ir.ui.view,arch_db:project.view_task_form2
 msgid "Working Time to Close"
-msgstr "Tiempo de trabajo para terminar"
+msgstr "Horas laborables para terminar"
 
 #. module: project
 #. openerp-web
@@ -5395,8 +5394,8 @@ msgid ""
 "You can also add a description to help your coworkers understand the meaning"
 " and purpose of the stage."
 msgstr ""
-"Incluso puede añadir una descripción para ayudar a sus compañeros de trabajo"
-" a entender el significado y el propósito de esta etapa."
+"Incluso puede agregar una descripción para ayudar a sus compañeros de "
+"trabajo a entender el significado y el propósito de esta etapa."
 
 #. module: project
 #: code:addons/project/models/project.py:0
